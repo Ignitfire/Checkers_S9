@@ -1,14 +1,15 @@
-import { Case } from "Case.js";
+import  Case  from "./Case.js";
+import  Move  from "./Move.js";
 
-class Pion {
+export default class Pion {
 
     // le joueur a qui le pion appartient
     player; // 0 pour j1, 1 pour j2
-    //* la position est une coordonnée
+    //* la position est une case
     position
     //* pion=0, 1=dame
     level
-    //* 0=inPlay, 1=eaten
+    //* 0=inPlay, 1=eaten, 2=won
     status
     
     constructor(x, y, player) {
@@ -18,76 +19,124 @@ class Pion {
     }
 
         /** retourne un tableau des actions possibles pour ce pion avec le type d'actions et la case d'arrivée  */
-    getPossibleMoves(plateau) {
-        Moves = [];
-        // if the piece is a pawn
-        if (this.level == 0) {
-            // inverse the direction of the moves if the player is 1
-            frontLeft = this.player == 0 ? Case.getDownRight : Case.getUpLeft;
-            frontRight = this.player == 0 ? Case.getDownLeft : Case.getUpRight;
-            backLeft = this.player == 0 ? Case.getUpRight : Case.getDownLeft;
-            backRight = this.player == 0 ? Case.getUpLeft : Case.getDownRight;
-                if(frontLeft() != null){
-                    if (this.isFree(frontLeft())) Moves.push(["move",this,new Case(frontLeft().x, frontLeft().y)]);
+    getPossibleMoves(plateau, takeOnly = false, depth=0, parent=null) {
+/*
+         * si takeOnly vaut false, rajouter les coups de type move en itérant sur frontleft et frontright pour pion ou pour dame.
+         * identifier chaque prise possible en itérant sur les quatres directions pour pion puis pour dame, 
+         *      pour chaque prises verifier les prises possible depuis la case destination en marquant le pion comme passé.
+         * cosntruire l'arbre de rafles en rajoutant chaque prises possiile depuis une prise comme move descendants.
+         * rajouter les coups take de premier niveau dans le tableau de moves.
+         */
+        let moves = [];
+        let directions = [];
+        // inverse the direction of the moves if the player is 1
+        //TODO potentiellement mettre ses fonctions dans player plutot qu'ici.
+        let frontLeft = this.player == 0 ? Case.getDownRight : Case.getUpLeft;
+        let frontRight = this.player == 0 ? Case.getDownLeft : Case.getUpRight;
+        let backLeft = this.player == 0 ? Case.getUpRight : Case.getDownLeft;
+        let backRight = this.player == 0 ? Case.getUpLeft : Case.getDownRight;
+        directions.push(frontLeft, frontRight, backLeft, backRight);
+
+        // sauvegarde de la position d'origine
+        let originalPostition = this.position; 
+            
+            // itération sur les directions
+            for(i=0;i<directions.length;i++){
+                let direction = directions[i];
+
+                // if the piece is a pawn 
+                if (this.level == 0) {
+                    if(direction() != null){
+                        // ajout de mouvement si la ce est libre dans les directions avant
+                        if (this.isFree(direction()) && !takeOnly && i<2) moves.push(new Move("move",this,new Case(direction().x, direction().y)));
+                        // ajout de prise recursive si la case est occupée par un pion adverse dans toutes les directions
+                        else{
+                            pawnToTake=this.getPawn(direction());
+                            // verifie que le pion est adverse, que la case derriere est libre et que le pion est non pris
+                            if(pawnToTake.player!=this.player && pawnToTake.isFree(pawnToTake.direction() && pawnToTake.status==0)){
+                                let destination=new Case(pawnToTake.position.direction().x, pawnToTake.position.direction().y);
+                                    
+                                // deplacement fictif du pion qui s'annule apres la recherche
+                                pawnToTake.status = 1;
+                                this.postition = destination;
+                                if(this.position.y == this.promotionRow) this.level = 1;
+    
+                                // recherche récursives des prises possibles depuis la case destination en takeOnly, l'indicateur de profondeur de la rafle "depth" est incrémenté
+                                let move = new Move("take", this, destination, parent, pawnToTake, depth);
+                                move.descendants=pawn.getPossibleMoves(plateau,true,depth+1, move);
+                                moves.push(move);
+
+                                //reset des variables du déplacement fictif
+                                this.position = originalPostition;
+                                this.level = 0;
+                                plateau.clearStatus();   
+                                }
+                            }
+                        }
+                }
+
+                // if the piece is a dame
+                else {
+                    let destination = position.direction();
+                    let pawnToTake = null;
+                    //
+                    let wentOver = false;
+                    while (destination!=null){
+                        if(!wentOver){
+                        /** si la case est libre sans prise */
+                        if(this.isFree(destination && !takeOnly)){
+                        moves.push(new Move ("move",this,new Case(destination.x, destination.y)));
+                        }
+                        /** prise d'un pion */
+                        else{
+                            pawnToTake=this.getPawn(destination);
+                            if(pawnToTake.player == this.player) break;
+                            else if(pawnToTake.isFree(pawnToTake.direction())){
+                                
+                            // deplacement fictif du pion qui s'annule apres la recherche
+                            pawnToTake.status = 1;
+                            pawn.postition = destination;
+
+                            // recherche récursives des prises possibles depuis la case destination en takeOnly, l'indicateur de profondeur de la rafle "depth" est incrémenté
+                            let move = new Move("take", this, destination, parent, pawnToTake, depth);
+                            move.descendants=pawn.getPossibleMoves(plateau,true,depth+1, move);
+                            moves.push(move);
+
+                            //reset des variables du déplacement fictif
+                            this.position = originalPostition;
+                            plateau.clearStatus();                                    
+                            
+                            wentOver = true;
+                            }
+                        }
+                    }
                     else{
-                        pawnToTake=this.getPawn(frontLeft());
-                        if(pawnToTake.player!=this.player && pawnToTake.isFree(pawnToTake.frontLeft())){
-                        Moves.push(["take",this,new Case(frontLeft().x, frontLeft().y)]);
+                        /** case d'arret après le pion */
+                        if(this.isFree(destination)){
+
+                            // deplacement fictif du pion qui s'annule apres la recherche
+                            pawnToTake.status = 1;
+                            pawn.postition = destination;
+
+                            // recherche récursives des prises possibles depuis la case destination en takeOnly, l'indicateur de profondeur de la rafle "depth" est incrémenté
+                            let move = new Move("take", this, destination,parent, pawnToTake, depth);
+                            move.descendants=pawn.getPossibleMoves(plateau,true,depth+1, move);
+                            moves.push(move);
+
+                            //reset des variables du déplacement fictif
+                            this.position = originalPostition;
+                            plateau.clearStatus();
+                        }
+                        else break;
+                    }
+                    /** itération sur la case suivante dans la meme direction, continue tant qu'on à pas rencontrer le bord ou deux pions. */
+                        destination = destination.direction();
                     }
                 }
-                }
-                if(frontRight() != null){
-                    if (this.isFree(frontRight())) Moves.push(["move",this,new Case(frontRight().x, frontRight().y)]);
-                    else{
-                        pawnToTake=this.getPawn(frontRight());
-                        if(pawnToTake.player!=this.player && pawnToTake.isFree(pawnToTake.frontRight())){
-                        Moves.push(["take",this,new Case(frontRight().x, frontRight().y)]);
-                    }
-                }
-                }
-                if(backLeft() != null && !isFree(backLeft())){
-                        pawnToTake=this.getPawn(backLeft());
-                        if(pawnToTake.player!=this.player && pawnToTake.isFree(pawnToTake.backLeft())){
-                        Moves.push(["take",this,new Case(backLeft().x, backLeft().y)]);
-                    }
-                }
-                if(backRight() != null && !isFree(backRight())){
-                        pawnToTake=this.getPawn(backRight());
-                        if(pawnToTake.player!=this.player && pawnToTake.isFree(pawnToTake.backRight())){
-                        Moves.push(["take",this,new Case(backRight().x, backRight().y)]);
-                    }
-                }
+
             }
-        // if the piece is a dame
-        else {
-            placeToMove = position.frontLeft();
-            moveToDo = true;
-            wentOver = false;
-            while (moveToDo) {
-                if(!wentOver){
-                    /** si la case est libre sans prise */
-                if(this.isFree(placeToMove)){
-                Moves.push(["move",this,new Case(placeToMove.x, placeToMove.y)]);
-                }
-                /** prise d'un pion */
-                else{
-                    pawnToTake=this.getPawn(placeToMove);
-                    if(pawnToTake.player!=this.player && pawnToTake.isFree(pawnToTake.frontLeft())){
-                        Moves.push(["take",this,new Case(placeToMove.x, placeToMove.y)]);
-                    }
-                    break;
-                }
-            }
-            else{
-                /** case d'arret après le pion */
-                if(this.isFree(placeToMove)){
-                Moves.push(["take",this,new Case(placeToMove.x, placeToMove.y)]);
-                }
-            }
-            /** itération sur la case suivante dans la meme direction, continue tant qu'on à pas rencontrer le bord ou deux pions. */
-                placeToMove = placeToMove.frontLeft();
-            }
-        }
+
+        return moves;
     }
     
     IsFree(coord){

@@ -1,4 +1,4 @@
-class Case {
+export default class Case {
  name;
  x;
  y;
@@ -9,7 +9,6 @@ class Case {
     this.name = "Case"+x+y;
         this.x = x;
         this.y = y;
-        this.isFree = true;
         this.pion = pion;
 
  }

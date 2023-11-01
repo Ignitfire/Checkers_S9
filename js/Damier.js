@@ -1,22 +1,30 @@
-class Damier {
+import Case from './Case.js';
+import Pion from './Pion.js';
+import Joueur from './Joueur.js'; 
+
+export default class Damier {
     /** tableau des cases */
     cases = [];
     pions = [];
     
     /** Dans ce constructeur, le joueur 1 est sytèmatiquement en haut */
-    init(){
+    constructor(j1, j2){
         this.cases = [];
-        White=false;
+        let White=false;
         for(let i=0; i<10; i++){
             White=!White;
             for(let j=0; j<10; j++){
                 if(!White){
-                    pion = null;
+                    let pion = null;
                     if(i<4){
-                        this.pions.push(new Pion(i,j,0));
+                        pion=new Pion(i,j,0);
+                        this.pions.push(pion);
+                        j1.pions.push(pion);
                     }
                     if(i>5){
-                        this.pions.push(new Pion(i,j,1));    
+                        pion=new Pion(i,j,1);
+                        this.pions.push(pion);
+                        j2.pions.push(pion);
                     }
                     this.cases.push(new Case(i,j,pion));
             }
@@ -30,5 +38,8 @@ class Damier {
 
     getCase(x,y){
         return this.cases.find(c => c.x == x && c.y == y);
+    }
+    clearStatus(){
+        this.cases.forEach(c => {if(c.status==1) c.status = 0});
     }
 }
