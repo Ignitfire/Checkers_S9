@@ -11,11 +11,14 @@ export default class Pion {
     level
     //* 0=inPlay, 1=eaten, 2=won
     status
+    color
     
     constructor(x, y, player) {
         this.player = player;
         this.position = new Case(x, y);
         this.level = 0;
+        this.status = 0;
+        this.color = player == 0 ? "white" : "black";
     }
 
         /** retourne un tableau des actions possibles pour ce pion avec le type d'actions et la case d'arrivée  */
