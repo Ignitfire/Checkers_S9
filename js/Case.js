@@ -17,17 +17,25 @@ export default class Case {
             return this.pion != null;
      }    
     getUpLeft() {
-        return (this.x>0 && this.y>0) ? {x: this.x - 1, y: this.y - 1} : null;
+        let x= this.x;
+        let y= this.y;
+        return (x>0 && y>0) ? {x: x - 1, y: y - 1} : null;
     }
     getUpRight() {
-        return (this.x<9 && this.y>0) ? {x: this.x + 1, y: this.y - 1} : null;
+        let x= this.x;
+        let y= this.y;
+        return (x>0 && y<9) ? {x: x - 1, y: y + 1} : null;
     }
 
     getDownLeft() {
-        return (this.x>0 && this.y<9) ? {x: this.x - 1, y: this.y + 1} : null;
+        let x= this.x;
+        let y= this.y;
+        return (x<9 && y>0) ? {x: x + 1, y: y - 1} : null;
     }
 
     getDownRight() {
-        return (this.x<9 && this.y<9) ? {x: this.x + 1, y: this.y + 1} : null;
+        let x= this.x;
+        let y= this.y;
+        return (x<9 && y<9) ? {x: x + 1, y: y + 1} : null;
     }
 }

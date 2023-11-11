@@ -68,8 +68,8 @@ export default class Joueur {
     /** recupere les coups (possibleMoves) et rafles (suite de possibleMoves dans moveSequence) */
     getMoves(plateau){
          /** recupère tout les coups possible de tous les pions */
-         pions.forEach(pion => {
-            this.possibleMoves.push(pion.getpossibleMoves(plateau));
+         this.pions.forEach(pion => {
+            this.possibleMoves.push(...pion.getPossibleMoves(plateau));
         });
         /** si il y a possiblité de prises retire tout les move de type move et les rafle de pronfondeur inferieur */
         if (this.possibleMoves.some(move => move[0] == "take")) {
