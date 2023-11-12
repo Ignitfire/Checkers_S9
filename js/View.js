@@ -37,3 +37,26 @@
             casePion.appendChild(pion);
         });
     }
+    
+    export function showPossibleMoves(possibleMoves){
+        possibleMoves.forEach(move => {
+            let caseMove = document.getElementById("case"+move.destination.x+move.destination.y);
+            caseMove.style.backgroundColor = "green";
+        });
+    }
+
+    export function movePawn(pawn, destination){
+        let pion = document.getElementById("pion"+pawn.position.x+pawn.position.y);
+        let casePion = document.getElementById("case"+pawn.position.x+pawn.position.y);
+        console.log(pawn,pion, casePion)
+        casePion.removeChild(pion);
+        let caseDestination = document.getElementById("case"+destination.x+destination.y);
+        caseDestination.appendChild(pion);
+        pion.id = "pion"+destination.x+destination.y;
+    }
+
+    export function removePawn(pawn){
+        let pion = document.getElementById("pion"+pawn.position.x+pawn.position.y);
+        let casePion = document.getElementById("case"+pawn.position.x+pawn.position.y);
+        casePion.removeChild(pion);
+    }

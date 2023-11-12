@@ -1,3 +1,5 @@
+import { movePawn } from "./View.js";
+
 export default class Joueur {
     /** l'utilisateur qui joue le joueur */
     user;
@@ -35,8 +37,10 @@ export default class Joueur {
     executeMove(move) {
         /** si le coup est un move, on déplace le pion */
         if (move.type == "move") {
-            move.pawn.position = move.destination;
             if(move.pawn.position.y == this.promotionRow) move.pawn.level = 1;
+            movePawn(move.pawn, move.destination);
+            move.pawn.position = move.destination;
+
         }
         /** si le coup est une prise, on déplace le pion, on supprime le pion pris et on met à jour le damier */
         if (move.type == "take") {

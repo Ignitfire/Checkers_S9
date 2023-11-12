@@ -11,3 +11,9 @@ Pour le visuel vous avez donc besoin d'avoir accès aux possibleMoves et d'appel
 J'ai créer une classe Move qui décrit les caracteristiques d'un mouvement de la part joueur, utile pour les simulations, les historiques pour se passer des mouvements de classe en classe, etc... hésitez pas à vous en servir. Idem pour les Cases plutot que 2 valeurs pour les coordonnées vu qu'on en a et que le damier est fait comme ca.
 Le damier comprend des pions et des cases je l'ai verifier c'est probablement le premier truc à mettre en vue.
 Hésitez pas si vous avez des questions, trouvez des erreurs (y en a plein), etc... Sinon il y a des commentaires un peu partout vous devriez vous y retrouver.
+
+Historique des tests:
+Structure général est correct, potentiellement à nettoyer/améliorer
+Initialisation marche
+getPossibleMoves testé fontionnelle pour move type pawn, a testé pour type dame et type move
+executeMove fonctionne et ajout de quelques fonctions de view basic
