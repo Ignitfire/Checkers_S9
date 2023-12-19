@@ -1,5 +1,3 @@
-import {movePawn} from "./View.js";
-
 export default class Joueur {
     /** l'utilisateur qui joue le joueur */
     user;
@@ -89,26 +87,4 @@ export default class Joueur {
             });
         }
     }
-
-    tour(plateau) {
-        this.getMoves(plateau);
-        if (this.possibleMoves.length == 0) {
-            return false;
-        }
-        let canPlay = true;
-        while (canPlay) {
-
-            // TODO render vue
-            // TODO await action, on recupere 2 coordonnées le pion a bougé et la case de destination
-            let coordFrom;
-            let coordTo;
-            // TODO verfiier cette fonction partiellement auto-généré
-            this.selectedMove = this.possibleMoves.find(move =>
-                move.pawn.position.x == coordFrom.x && move.pawn.position.y == coordFrom.y && move.destination.x == coordTo.x && move.destination.y == coordTo.y
-            );
-            this.executeMove(this.selectedMove);
-            if (!nextMove(this.selectedMove)) canPlay = false;
-        }
-    }
-
 }

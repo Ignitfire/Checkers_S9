@@ -34,33 +34,53 @@ export function showAllPawns(game) {
 
 export function showPawnsOfPlayer(joueur) {
     joueur.pions.forEach(p => {
-        let pion = p.getRender();
-        let casePion = document.getElementById("case" + p.c.x + p.c.y);
-        casePion.appendChild(pion);
+        showPawn(p);
+    });
+}
+
+/**
+ * On supprime tous les mouvements possibles actuellement affichés
+ */
+export function cleanPossibleMoves()
+{
+    document.querySelectorAll(".case.possibleMove").forEach(elm => {
+        elm.classList.remove('possibleMove');
+        const clone = elm.cloneNode(true);
+        elm.replaceWith(clone);
     });
 }
 
 export function showPossibleMoves(possibleMoves) {
     possibleMoves.forEach(move => {
-        let caseMove = document.getElementById("case" + move.destination.x + move.destination.y);
-        caseMove.classList.add("possibleMove");
-        caseMove.addEventListener("click", () => {
+        const caseSource = document.getElementById("case" + move.pawn.c.x + move.pawn.c.y);
+        const caseDestination = document.getElementById("case" + move.destination.x + move.destination.y);
+        caseDestination.classList.add("possibleMove");
+        caseDestination.addEventListener("click", () => {
+            cleanPossibleMoves(); // On supprime tous les mouvements possibles actuellement affichés
             move.execute();
-            movePawn(move.pawn, move.destination);
+            caseSource.removeChild(caseSource.lastChild); // On supprime le pion de sa case de départ
+            showPawn(move.pawn); // On affiche le pion sur sa case de destination
+            if (move.type === "take") {
+                removePawn(move.pawnToTake);
+            }
         });
     });
 }
 
-export function movePawn(source, destination) {
-    let casePion = document.getElementById("case" + source.x + source.y);
-    casePion.removeChild(casePion.lastChild);
-    let caseDestination = document.getElementById("case" + destination.x + destination.y);
-    let pion = pawn.getRender();
-    caseDestination.appendChild(pion);
+export function showPawn(pawn) {
+    const pion = document.createElement("div");
+    pion.id = "pion"+pawn.c.x+pawn.c.y;
+    pion.classList.add("pion");
+    pion.classList.add(pawn.color);
+    pion.addEventListener("click", () => {
+        cleanPossibleMoves(); // On supprime tous les mouvements possibles actuellement affichés
+        showPossibleMoves(pawn.getPossibleMoves());
+    });
+    const casePion = document.getElementById("case" + pawn.c.x + pawn.c.y);
+    casePion.appendChild(pion);
 }
 
 export function removePawn(pawn) {
-    let pion = document.getElementById("pion" + pawn.c.x + pawn.c.y);
-    let casePion = document.getElementById("case" + pawn.c.x + pawn.c.y);
-    casePion.removeChild(pion);
+    const caseOfPawn = document.getElementById("case" + pawn.c.x + pawn.c.y);
+    caseOfPawn.removeChild(caseOfPawn.lastChild);
 }

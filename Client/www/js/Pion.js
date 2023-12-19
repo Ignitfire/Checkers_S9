@@ -57,7 +57,7 @@ export default class Pion {
                         moves.push(new Move("move", this, caseFromDirection));
                     }
                     // ajout de prise recursive si la case est occupée par un pion adverse dans toutes les directions
-                    /*else {
+                    else {
                         let pawnToTake = caseFromDirection.pion;
                         // verifie que le pion est adverse, que la case derriere est libre et que le pion est non pris
                         if (pawnToTake.player.playerNumber != this.player.playerNumber && pawnToTake.isFree(pawnToTake.direction(), plateau) && pawnToTake.status == 0) {
@@ -78,10 +78,9 @@ export default class Pion {
                             this.level = 0;
                             plateau.clearStatus();
                         }
-                    }*/
+                    }
                 }
             }
-
             // if the piece is a dame
             else {
                 let destination = this.c.direction();
@@ -144,18 +143,6 @@ export default class Pion {
         return moves;
     }
 
-    isFree(coord, plateau) {
-        return plateau.getPion(coord.x, coord.y) == null;
-    }
-
-    Move(coord) {
-        //TODO: Check move is possible
-        //TODO: Move the piece
-        //TODO: Check if the piece is a dame
-        //TODO: Check if the piece can eat another piece
-        //TODO: update visuals
-    }
-
     getPlateau() {
         return this.c.plateau;
     }
@@ -166,21 +153,5 @@ export default class Pion {
      */
     isOnPromotionRow() {
         return this.c.y === this.player.promotionRow;
-    }
-
-    /**
-     * Affichage d'un pion
-     * @param {}
-     * @returns {HTMLDivElement}
-     */
-    getRender() {
-        let pion = document.createElement("div");
-        pion.id = "pion"+this.c.x+this.c.y;
-        pion.classList.add("pion");
-        pion.classList.add(this.color);
-        pion.addEventListener("click", () => {
-            showPossibleMoves(this.getPossibleMoves());
-        });
-        return pion;
     }
 }

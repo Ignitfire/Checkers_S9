@@ -25,7 +25,6 @@ export default class Move {
         /** si le coup est un move, on déplace le pion */
         if (this.type === "move") {
             if (this.pawn.isOnPromotionRow()) this.pawn.level = 1;
-            console.log(this.pawn.c);
             this.pawn.c.setPawn(null);
             this.pawn.c = this.destination;
             this.destination.setPawn(this.pawn);
