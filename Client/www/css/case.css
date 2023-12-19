@@ -1,0 +1,16 @@
+.case {
+    height: 50px;
+    width: 50px;
+}
+
+.case.brown {
+    background-color: brown;
+}
+
+.case.beige {
+    background-color: beige;
+}
+
+.case.brown.possibleMove, .case.white.possibleMove {
+    background-color: green;
+}

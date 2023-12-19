@@ -1,0 +1,13 @@
+.pion {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+
+.pion.black {
+    background-color: black;
+}
+
+.pion.white {
+    background-color: white;
+}
