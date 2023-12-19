@@ -1,3 +1,8 @@
+export function showGame(game) {
+    showDamier();
+    showAllPawns(game);
+}
+
 export function showDamier() {
     // create a new div element
     let damier = document.createElement("div");
@@ -22,21 +27,16 @@ export function showDamier() {
     document.body.appendChild(damier);
 }
 
-export function showPions(pions) {
-    pions.forEach(p => {
-        let pion = p.getRender();
-        let casePion = document.getElementById("case" + p.position.x + p.position.y);
-        casePion.appendChild(pion);
-    });
+export function showAllPawns(game) {
+    showPawnsOfPlayer(game.Joueur1);
+    showPawnsOfPlayer(game.Joueur2);
 }
 
-export function cleanPossibleMoves() {
-    document.querySelectorAll(".case.possibleMove").forEach(e => {
-        e.classList.remove("possibleMove");
-
-        // En clonant le noeud, on supprime tous les Eventlistener sur celui-ci
-        let clone = e.cloneNode(true);
-        e.replaceWith(clone);
+export function showPawnsOfPlayer(joueur) {
+    joueur.pions.forEach(p => {
+        let pion = p.getRender();
+        let casePion = document.getElementById("case" + p.c.x + p.c.y);
+        casePion.appendChild(pion);
     });
 }
 
@@ -45,24 +45,22 @@ export function showPossibleMoves(possibleMoves) {
         let caseMove = document.getElementById("case" + move.destination.x + move.destination.y);
         caseMove.classList.add("possibleMove");
         caseMove.addEventListener("click", () => {
-            // TODO : Déplacement du pion selon le move associé
-            cleanPossibleMoves();
-            move.pawn.player.executeMove(move);
+            move.execute();
+            movePawn(move.pawn, move.destination);
         });
     });
 }
 
-export function movePawn(pawn, destination) {
-    let casePion = document.getElementById("case" + pawn.position.x + pawn.position.y);
+export function movePawn(source, destination) {
+    let casePion = document.getElementById("case" + source.x + source.y);
     casePion.removeChild(casePion.lastChild);
-    pawn.position = destination;
     let caseDestination = document.getElementById("case" + destination.x + destination.y);
     let pion = pawn.getRender();
     caseDestination.appendChild(pion);
 }
 
 export function removePawn(pawn) {
-    let pion = document.getElementById("pion" + pawn.position.x + pawn.position.y);
-    let casePion = document.getElementById("case" + pawn.position.x + pawn.position.y);
+    let pion = document.getElementById("pion" + pawn.c.x + pawn.c.y);
+    let casePion = document.getElementById("case" + pawn.c.x + pawn.c.y);
     casePion.removeChild(pion);
 }

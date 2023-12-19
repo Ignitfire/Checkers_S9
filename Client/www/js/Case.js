@@ -3,14 +3,21 @@ export default class Case {
     x;
     y;
     pion;
+    plateau;
 
-
-    constructor(x, y, pion) {
+    constructor(x, y, plateau) {
         this.name = "Case" + x + y;
         this.x = x;
         this.y = y;
-        this.pion = pion;
+        this.plateau = plateau;
+    }
 
+    /**
+     * Défini un pion sur la case
+     * @param pawn
+     */
+    setPawn(pawn) {
+        this.pion = pawn;
     }
 
     hasPawn() {
