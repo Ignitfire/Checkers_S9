@@ -11,3 +11,13 @@
 .pion.white {
     background-color: white;
 }
+
+.dame {
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.black .dame {
+    color: white;
+}

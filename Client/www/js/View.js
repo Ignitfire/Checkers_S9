@@ -76,6 +76,12 @@ export function showPawn(pawn) {
     pion.id = "pion"+pawn.c.x+pawn.c.y;
     pion.classList.add("pion");
     pion.classList.add(pawn.color);
+    if (pawn.level === 1) {
+        const dame = document.createElement("div");
+        dame.classList.add("dame");
+        dame.textContent = "D";
+        pion.appendChild(dame);
+    }
     pion.addEventListener("click", () => {
         cleanPossibleMoves(); // On supprime tous les mouvements possibles actuellement affichés
         showPossibleMoves(pawn.getPossibleMoves());

@@ -129,7 +129,7 @@ export default class Pion {
      * @returns {boolean}
      */
     isOnPromotionRow() {
-        return this.c.y === this.player.promotionRow;
+        return this.c.x === this.player.promotionRow;
     }
 
     hasSamePlayer(pawn) {
