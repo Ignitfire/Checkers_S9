@@ -33,14 +33,7 @@ export default class Pion {
          * rajouter les coups take de premier niveau dans le tableau de moves.
          */
         let moves = [];
-        let directions = [];
-        // inverse the direction of the moves if the player is 1
-        //TODO potentiellement mettre ses fonctions dans player plutot qu'ici.
-        let frontLeft = this.player.playerNumber === 1 ? this.c.getDownRight.bind(this.c) : this.c.getUpLeft.bind(this.c);
-        let frontRight = this.player.playerNumber === 1 ? this.c.getDownLeft.bind(this.c) : this.c.getUpRight.bind(this.c);
-        let backLeft = this.player.playerNumber === 1 ? this.c.getUpRight.bind(this.c) : this.c.getDownLeft.bind(this.c);
-        let backRight = this.player.playerNumber === 1 ? this.c.getUpLeft.bind(this.c) : this.c.getDownRight.bind(this.c);
-        directions.push(frontLeft, frontRight, backLeft, backRight);
+        let directions = this.player.getDirections();
 
         // sauvegarde de la position d'origine
         let originalPostition = this.c;
@@ -48,41 +41,25 @@ export default class Pion {
         // itération sur les directions
         for (let i = 0; i < directions.length; i++) {
             let direction = directions[i];
-            // if the piece is a pawn
-            if (this.level == 0) {
-                if (direction() != null) {
-                    // ajout de mouvement si la case est libre dans les directions avant
-                    let caseFromDirection = this.getPlateau().getCaseFromDirection(direction());
-                    if (! caseFromDirection.hasPawn() && !takeOnly && i < 2) {
-                        moves.push(new Move("move", this, caseFromDirection));
-                    }
+            let coord = this.c.getCoordFromDirection(direction); // Récupération des coordonnées X,Y en fonction de la direction de la case courante
+            if (this.level === 0 && coord !== null) {
+                let caseFromDirection = this.getPlateau().getCaseFromCoord(coord); // On récupère la case à partir des coordonnées X,Y
+                if (! caseFromDirection.hasPawn() && !takeOnly && i < 2) {
+                    moves.push(new Move("move", this, caseFromDirection)); // Ajout de mouvement si la case est libre dans les directions avant
+                } else if (caseFromDirection.hasPawn() || takeOnly) {
                     // ajout de prise recursive si la case est occupée par un pion adverse dans toutes les directions
-                    else {
-                        let pawnToTake = caseFromDirection.pion;
+                    let pawnToTake = caseFromDirection.pion;
+                    let coordBehindPawn = pawnToTake.c.getCoordFromDirection(direction);
+                    if (coordBehindPawn !== null) {
+                        let destination = this.getPlateau().getCaseFromCoord(coordBehindPawn);
                         // verifie que le pion est adverse, que la case derriere est libre et que le pion est non pris
-                        if (pawnToTake.player.playerNumber != this.player.playerNumber && pawnToTake.isFree(pawnToTake.direction(), plateau) && pawnToTake.status == 0) {
-                            let destination = plateau.getCase(pawnToTake.c.direction().x, pawnToTake.c.direction().y);
-
-                            // deplacement fictif du pion qui s'annule apres la recherche
-                            pawnToTake.status = 1;
-                            this.c = destination;
-                            if (this.c.y == this.promotionRow) this.level = 1;
-
-                            // recherche récursives des prises possibles depuis la case destination en takeOnly, l'indicateur de profondeur de la rafle "depth" est incrémenté
+                        if (! destination.hasPawn() && ! this.hasSamePlayer(pawnToTake) && pawnToTake.status == 0) {
                             let move = new Move("take", this, destination, parent, pawnToTake, depth);
-                            move.descendants = pawn.getPossibleMoves(plateau, true, depth + 1, move);
                             moves.push(move);
-
-                            //reset des variables du déplacement fictif
-                            this.c = originalPostition;
-                            this.level = 0;
-                            plateau.clearStatus();
                         }
                     }
                 }
-            }
-            // if the piece is a dame
-            else {
+            } else if (this.level === 1) {
                 let destination = this.c.direction();
                 let pawnToTake = null;
                 //
@@ -153,5 +130,9 @@ export default class Pion {
      */
     isOnPromotionRow() {
         return this.c.y === this.player.promotionRow;
+    }
+
+    hasSamePlayer(pawn) {
+        return this.player.playerNumber === pawn.player.playerNumber;
     }
 }

@@ -45,6 +45,7 @@ export function cleanPossibleMoves()
 {
     document.querySelectorAll(".case.possibleMove").forEach(elm => {
         elm.classList.remove('possibleMove');
+        elm.classList.remove('take');
         const clone = elm.cloneNode(true);
         elm.replaceWith(clone);
     });
@@ -55,14 +56,17 @@ export function showPossibleMoves(possibleMoves) {
         const caseSource = document.getElementById("case" + move.pawn.c.x + move.pawn.c.y);
         const caseDestination = document.getElementById("case" + move.destination.x + move.destination.y);
         caseDestination.classList.add("possibleMove");
+        if (move.type === "take") {
+            caseDestination.classList.add("take");
+        }
         caseDestination.addEventListener("click", () => {
             cleanPossibleMoves(); // On supprime tous les mouvements possibles actuellement affichés
+            if (move.type === "take") {
+                removePawn(move.pawnToTake); // On supprime le pion pris
+            }
             move.execute();
             caseSource.removeChild(caseSource.lastChild); // On supprime le pion de sa case de départ
             showPawn(move.pawn); // On affiche le pion sur sa case de destination
-            if (move.type === "take") {
-                removePawn(move.pawnToTake);
-            }
         });
     });
 }

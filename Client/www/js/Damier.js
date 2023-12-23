@@ -2,10 +2,17 @@ import Case from './Case.js';
 import Pion from './Pion.js';
 
 export default class Damier {
-    /** tableau des cases */
+    /**
+     * Tableau de cases
+     * @type {Case[]}
+     */
     cases = [];
 
-    /** Dans ce constructeur, le joueur 1 est sytèmatiquement en haut */
+    /**
+     * Dans ce constructeur, le joueur 1 est sytèmatiquement en haut
+     * @param j1 Joueur
+     * @param j2 Joueur
+     */
     constructor(j1, j2) {
         this.cases = [];
         let White = false;
@@ -39,8 +46,14 @@ export default class Damier {
         return this.cases.find(c => c.x == x && c.y == y);
     }
 
-    getCaseFromDirection(direction) {
-        return this.cases.find(c => c.x == direction.x && c.y == direction.y);
+    /**
+     * Retourne la case du plateau par rapport à des coordonnées données
+     *
+     * @param coord
+     * @returns {Case}
+     */
+    getCaseFromCoord(coord) {
+        return this.cases.find(c => c.x === coord.x && c.y === coord.y);
     }
 
     clearStatus() {

@@ -14,3 +14,7 @@
 .case.brown.possibleMove, .case.white.possibleMove {
     background-color: green;
 }
+
+.case.brown.possibleMove.take, .case.white.possibleMove.take {
+    background: orange;
+}

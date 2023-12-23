@@ -1,5 +1,8 @@
 export default class Joueur {
-    /** l'utilisateur qui joue le joueur */
+    /**
+     * L'utilisateur qui joue le joueur
+     * @type {User}
+     */
     user;
     /** indice de la première ligne du joueur adverse ou les pions sont promus en dames */
     promotionRow;
@@ -20,6 +23,11 @@ export default class Joueur {
     /** liste de coups possible, tableau de move ou take */
     possibleMoves = [];
 
+    /**
+     *
+     * @param user User
+     * @param playerNumber int
+     */
     constructor(user, playerNumber) {
         this.user = user;
         this.playerNumber = playerNumber;
@@ -86,5 +94,13 @@ export default class Joueur {
                 this.possibleMoves.push(moveSequence[0]);
             });
         }
+    }
+
+    /**
+     *
+     * frontLeft, frontRight, backLeft, backRight
+     */
+    getDirections() {
+        return this.playerNumber === 1 ? ["DownRight", "DownLeft", "UpRight", "UpLeft"] : ["UpLeft", "UpRight", "DownLeft", "DownRight"];
     }
 }
