@@ -44,7 +44,7 @@ export default class Pion {
             let coord = this.c.getCoordFromDirection(direction); // Récupération des coordonnées X,Y en fonction de la direction de la case courante
             if (this.level === 0 && coord !== null) {
                 let caseFromDirection = this.getPlateau().getCaseFromCoord(coord); // On récupère la case à partir des coordonnées X,Y
-                if (! caseFromDirection.hasPawn() && !takeOnly && i < 2) {
+                if (!caseFromDirection.hasPawn() && !takeOnly && i < 2) {
                     moves.push(new Move("move", this, caseFromDirection)); // Ajout de mouvement si la case est libre dans les directions avant
                 } else if (caseFromDirection.hasPawn() || takeOnly) {
                     // ajout de prise recursive si la case est occupée par un pion adverse dans toutes les directions
@@ -53,65 +53,42 @@ export default class Pion {
                     if (coordBehindPawn !== null) {
                         let destination = this.getPlateau().getCaseFromCoord(coordBehindPawn);
                         // verifie que le pion est adverse, que la case derriere est libre et que le pion est non pris
-                        if (! destination.hasPawn() && ! this.hasSamePlayer(pawnToTake) && pawnToTake.status == 0) {
+                        if (!destination.hasPawn() && !this.hasSamePlayer(pawnToTake) && pawnToTake.status == 0) {
                             let move = new Move("take", this, destination, parent, pawnToTake, depth);
                             moves.push(move);
                         }
                     }
                 }
-            } else if (this.level === 1) {
-                let destination = this.c.direction();
+            } else if (this.level === 1 && coord !== null) {
+                let destination = coord
                 let pawnToTake = null;
-                //
                 let wentOver = false;
                 while (destination != null) {
+                    let caseFromDirection = this.getPlateau().getCaseFromCoord(destination); // On récupère la case à partir des coordonnées X,Y
                     if (!wentOver) {
                         /** si la case est libre sans prise */
-                        if (this.isFree(destination, plateau) && !takeOnly) {
-                            moves.push(new Move("move", this, new Case(destination.x, destination.y)));
-                        }
-                        /** prise d'un pion */
-                        else {
-                            pawnToTake = plateau.getPion(destination.x, destination.y);
-                            if (pawnToTake.player.playerNumber == this.player.playerNumber) break;
-                            else if (pawnToTake.isFree(pawnToTake.direction(), plateau)) {
-
-                                // deplacement fictif du pion qui s'annule apres la recherche
-                                pawnToTake.status = 1;
-                                pawn.c = destination;
-
-                                // recherche récursives des prises possibles depuis la case destination en takeOnly, l'indicateur de profondeur de la rafle "depth" est incrémenté
-                                let move = new Move("take", this, destination, parent, pawnToTake, depth);
-                                move.descendants = pawn.getPossibleMoves(plateau, true, depth + 1, move);
-                                moves.push(move);
-
-                                //reset des variables du déplacement fictif
-                                this.c = originalPostition;
-                                plateau.clearStatus();
-
-                                wentOver = true;
+                        if (!caseFromDirection.hasPawn() && !takeOnly) {
+                            moves.push(new Move("move", this, caseFromDirection));
+                        } else if (caseFromDirection.hasPawn() || takeOnly) {
+                            // ajout de prise recursive si la case est occupée par un pion adverse dans toutes les directions
+                            let pawnToTake = caseFromDirection.pion;
+                            let coordBehindPawn = pawnToTake.c.getCoordFromDirection(direction);
+                            if (coordBehindPawn !== null) {
+                                let destination = this.getPlateau().getCaseFromCoord(coordBehindPawn);
+                                // verifie que le pion est adverse, que la case derriere est libre et que le pion est non pris
+                                if (!destination.hasPawn() && !this.hasSamePlayer(pawnToTake) && pawnToTake.status == 0) {
+                                    let move = new Move("take", this, destination, parent, pawnToTake, depth);
+                                    moves.push(move);
+                                    wentOver = true;
+                                }
                             }
                         }
-                    } else {
-                        /** case d'arret après le pion */
-                        if (this.isFree(destination, plateau)) {
-
-                            // deplacement fictif du pion qui s'annule apres la recherche
-                            pawnToTake.status = 1;
-                            pawn.c = destination;
-
-                            // recherche récursives des prises possibles depuis la case destination en takeOnly, l'indicateur de profondeur de la rafle "depth" est incrémenté
-                            let move = new Move("take", this, destination, parent, pawnToTake, depth);
-                            move.descendants = pawn.getPossibleMoves(plateau, true, depth + 1, move);
-                            moves.push(move);
-
-                            //reset des variables du déplacement fictif
-                            this.c = originalPostition;
-                            plateau.clearStatus();
-                        } else break;
-                    }
+                    } else if (!caseFromDirection.hasPawn()) {
+                        let move = new Move("take", this, destination, parent, pawnToTake, depth);
+                        moves.push(move);
+                    } else break;
                     /** itération sur la case suivante dans la meme direction, continue tant qu'on à pas rencontrer le bord ou deux pions. */
-                    destination = destination.direction();
+                    destination = caseFromDirection.getCoordFromDirection(direction);
                 }
             }
 
