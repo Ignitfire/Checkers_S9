@@ -1,7 +1,8 @@
-import {movePawn} from "./View.js";
-
 export default class Joueur {
-    /** l'utilisateur qui joue le joueur */
+    /**
+     * L'utilisateur qui joue le joueur
+     * @type {User}
+     */
     user;
     /** indice de la première ligne du joueur adverse ou les pions sont promus en dames */
     promotionRow;
@@ -22,6 +23,11 @@ export default class Joueur {
     /** liste de coups possible, tableau de move ou take */
     possibleMoves = [];
 
+    /**
+     *
+     * @param user User
+     * @param playerNumber int
+     */
     constructor(user, playerNumber) {
         this.user = user;
         this.playerNumber = playerNumber;
@@ -31,23 +37,6 @@ export default class Joueur {
         } else {
             this.color = "black";
             this.promotionRow = 0;
-        }
-    }
-
-
-    executeMove(move) {
-        /** si le coup est un move, on déplace le pion */
-        if (move.type == "move") {
-            if (move.pawn.position.y == this.promotionRow) move.pawn.level = 1;
-            movePawn(move.pawn, move.destination);
-
-        }
-        /** si le coup est une prise, on déplace le pion, on supprime le pion pris et on met à jour le damier */
-        if (move.type == "take") {
-            move.pawn.position = move.destination;
-            if (move.pawn.position.y == this.promotionRow) move.pawn.level = 1;
-            move.pawnToTake.position = null;
-            move.pawnToTake = null;
         }
     }
 
@@ -107,25 +96,11 @@ export default class Joueur {
         }
     }
 
-    tour(plateau) {
-        this.getMoves(plateau);
-        if (this.possibleMoves.length == 0) {
-            return false;
-        }
-        let canPlay = true;
-        while (canPlay) {
-
-            // TODO render vue
-            // TODO await action, on recupere 2 coordonnées le pion a bougé et la case de destination
-            let coordFrom;
-            let coordTo;
-            // TODO verfiier cette fonction partiellement auto-généré
-            this.selectedMove = this.possibleMoves.find(move =>
-                move.pawn.position.x == coordFrom.x && move.pawn.position.y == coordFrom.y && move.destination.x == coordTo.x && move.destination.y == coordTo.y
-            );
-            this.executeMove(this.selectedMove);
-            if (!nextMove(this.selectedMove)) canPlay = false;
-        }
+    /**
+     *
+     * frontLeft, frontRight, backLeft, backRight
+     */
+    getDirections() {
+        return this.playerNumber === 1 ? ["DownRight", "DownLeft", "UpRight", "UpLeft"] : ["UpLeft", "UpRight", "DownLeft", "DownRight"];
     }
-
 }

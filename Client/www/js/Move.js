@@ -14,11 +14,27 @@ export default class Move {
         this.type = type;
         this.pawn = pawn;
         this.destination = destination;
-
         this.parent = parent;
         this.pawnToTake = pawnToTake;
         this.descendants = descendants;
         this.depth = depth;
     }
 
+    execute() {
+        /** si le coup est un move, on déplace le pion */
+        if (this.type === "move") {
+            this.pawn.c.setPawn(null);
+            this.pawn.c = this.destination;
+            if (this.pawn.isOnPromotionRow()) this.pawn.level = 1;
+            this.destination.setPawn(this.pawn);
+        }
+        /** si le coup est une prise, on déplace le pion, on supprime le pion pris et on met à jour le damier */
+        if (this.type === "take") {
+            this.pawn.c.setPawn(null);
+            this.pawn.c = this.destination;
+            if (this.pawn.isOnPromotionRow()) this.pawn.level = 1;
+            this.destination.setPawn(this.pawn);
+            this.pawnToTake.c.setPawn(null);
+        }
+    }
 }

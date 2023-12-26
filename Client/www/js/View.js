@@ -1,3 +1,8 @@
+export function showGame(game) {
+    showDamier();
+    showAllPawns(game);
+}
+
 export function showDamier() {
     // create a new div element
     let damier = document.createElement("div");
@@ -22,47 +27,70 @@ export function showDamier() {
     document.body.appendChild(damier);
 }
 
-export function showPions(pions) {
-    pions.forEach(p => {
-        let pion = p.getRender();
-        let casePion = document.getElementById("case" + p.position.x + p.position.y);
-        casePion.appendChild(pion);
+export function showAllPawns(game) {
+    showPawnsOfPlayer(game.Joueur1);
+    showPawnsOfPlayer(game.Joueur2);
+}
+
+export function showPawnsOfPlayer(joueur) {
+    joueur.pions.forEach(p => {
+        showPawn(p);
     });
 }
 
-export function cleanPossibleMoves() {
-    document.querySelectorAll(".case.possibleMove").forEach(e => {
-        e.classList.remove("possibleMove");
-
-        // En clonant le noeud, on supprime tous les Eventlistener sur celui-ci
-        let clone = e.cloneNode(true);
-        e.replaceWith(clone);
+/**
+ * On supprime tous les mouvements possibles actuellement affichés
+ */
+export function cleanPossibleMoves()
+{
+    document.querySelectorAll(".case.possibleMove").forEach(elm => {
+        elm.classList.remove('possibleMove');
+        elm.classList.remove('take');
+        const clone = elm.cloneNode(true);
+        elm.replaceWith(clone);
     });
 }
 
 export function showPossibleMoves(possibleMoves) {
     possibleMoves.forEach(move => {
-        let caseMove = document.getElementById("case" + move.destination.x + move.destination.y);
-        caseMove.classList.add("possibleMove");
-        caseMove.addEventListener("click", () => {
-            // TODO : Déplacement du pion selon le move associé
-            cleanPossibleMoves();
-            move.pawn.player.executeMove(move);
+        const caseSource = document.getElementById("case" + move.pawn.c.x + move.pawn.c.y);
+        const caseDestination = document.getElementById("case" + move.destination.x + move.destination.y);
+        caseDestination.classList.add("possibleMove");
+        if (move.type === "take") {
+            caseDestination.classList.add("take");
+        }
+        caseDestination.addEventListener("click", () => {
+            cleanPossibleMoves(); // On supprime tous les mouvements possibles actuellement affichés
+            if (move.type === "take") {
+                removePawn(move.pawnToTake); // On supprime le pion pris
+            }
+            move.execute();
+            caseSource.removeChild(caseSource.lastChild); // On supprime le pion de sa case de départ
+            showPawn(move.pawn); // On affiche le pion sur sa case de destination
         });
     });
 }
 
-export function movePawn(pawn, destination) {
-    let casePion = document.getElementById("case" + pawn.position.x + pawn.position.y);
-    casePion.removeChild(casePion.lastChild);
-    pawn.position = destination;
-    let caseDestination = document.getElementById("case" + destination.x + destination.y);
-    let pion = pawn.getRender();
-    caseDestination.appendChild(pion);
+export function showPawn(pawn) {
+    const pion = document.createElement("div");
+    pion.id = "pion"+pawn.c.x+pawn.c.y;
+    pion.classList.add("pion");
+    pion.classList.add(pawn.color);
+    if (pawn.level === 1) {
+        const dame = document.createElement("div");
+        dame.classList.add("dame");
+        dame.textContent = "D";
+        pion.appendChild(dame);
+    }
+    pion.addEventListener("click", () => {
+        cleanPossibleMoves(); // On supprime tous les mouvements possibles actuellement affichés
+        showPossibleMoves(pawn.getPossibleMoves());
+    });
+    const casePion = document.getElementById("case" + pawn.c.x + pawn.c.y);
+    casePion.appendChild(pion);
 }
 
 export function removePawn(pawn) {
-    let pion = document.getElementById("pion" + pawn.position.x + pawn.position.y);
-    let casePion = document.getElementById("case" + pawn.position.x + pawn.position.y);
-    casePion.removeChild(pion);
+    const caseOfPawn = document.getElementById("case" + pawn.c.x + pawn.c.y);
+    caseOfPawn.removeChild(caseOfPawn.lastChild);
 }
