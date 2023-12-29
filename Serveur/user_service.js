@@ -1,11 +1,11 @@
 //<==== Services gestion utilisateurs basé sur le modèle User.js===>
 // <---- Dépendances ---->
-const UserModel = require("client/www/js/User");
+const UserModel = require("./models/user_model");
 const bcrypt = require("bcryptjs"); //pour le hashage du mot de passe. bycryptjs permet d'éviter les problèmes de dépendances => bycrypt est lié nativement à node
 /* Il est possible qu'il vaudrait mieux créer un modèle pour l'utilisateur pour 
 simplifier son insértion dans la bdd with mongoose.Schema => à voir
 Alternative => modifier le fichier modèle dans client et ajouter le schéma pour le modèle et les exports + déoendances bdd_co et mongoose */
-const User = UserModel.User; // pas sûre que cela marche sans un fichier de modèle valable
+const User = UserModel.User// pas sûre que cela marche sans un fichier de modèle valable
 
 // <---- Fonctions ---->
 
