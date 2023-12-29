@@ -11,7 +11,7 @@ async function updateGagnant(name) {
 async function create (data) {
     //voir avec le modèle 
     //on créer une nouvelle instance
-    // et on la sauvegarde dans MongoDb avec un catch pour afficher si il y a une errer
+    // et on la sauvegarde dans MongoDb avec un catch pour afficher si il y a une erreur
 
 }
 
