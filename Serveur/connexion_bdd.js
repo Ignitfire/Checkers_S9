@@ -5,7 +5,7 @@ let mongoose = require('mongoose');
 //TODO :
 //const server = "à_définir_adresse";
 // Nom de la bdd
-//const database = 'ajouter_nom';
+const database = 'jeu_dame';
 
 class Database {
   constructor() {
