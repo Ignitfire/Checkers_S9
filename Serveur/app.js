@@ -3,15 +3,15 @@
 //Node
 var server = require ("http").createServer();
 const io = require ("socket.io")(server);
-//TODO:
-// var user_manage, game_manage, adresse_manage
+var user_gestion = require("./gestions/user_gestion");
 var bdd_connexion = require("./connexion_bdd");
 var room = require("./room");
 var game_gestion = require ("./gestions/game_gestion");
 var adresse_gestion = require ("./gestions/adresse_gestion");
 
+//TODO: fonction d'historique des parties 
 
-//ajouter const portServeur
+const portServeur = 3000; // à vérifier si sela ne pose pas de conflit avec d'autres services sinon changer le port
 var WaitListe = [];
 
 //Lance le serveur
@@ -128,5 +128,5 @@ io.on("connection", function(socket) {
                 socket.to(`${game.idJ1}`).emit("deconnexion", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J1);
             }
     });
-    
+
 });

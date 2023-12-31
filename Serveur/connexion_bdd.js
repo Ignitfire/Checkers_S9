@@ -3,7 +3,7 @@ let mongoose = require('mongoose');
 
 // Serveur de la bdd
 //TODO :
-//const server = "à_définir_adresse";
+//const server = "à_définir_adresse"; -----------------> A DEFINIR
 // Nom de la bdd
 const database = 'jeu_dame';
 
