@@ -1,8 +1,14 @@
 // A FINIR !!!!!!!!!!!!!
 // <---- Dépendance --->
 //Node
-var server = require ("http").createServer();
-const io = require ("socket.io")(server);
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const server = createServer();
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:8000"
+    }
+});
 var user_gestion = require("./gestions/user_gestion");
 var bdd_connexion = require("./connexion_bdd");
 var room = require("./room");
