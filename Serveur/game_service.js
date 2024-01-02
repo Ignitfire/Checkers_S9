@@ -1,5 +1,5 @@
 //<====== Gestion Service de la partie==> 
-var game_model = require("../models/game_model");
+var game_model = require("./models/game_model");
 var Partie = game_model.Partie;
 
 // TODO : ajout des variables du modèle joueur ? => gestions des couleurs à bouger du coup

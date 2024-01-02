@@ -12,16 +12,16 @@ class Database {
     this._connect()
   }
 
-  // Connexion à la base de données 
-// useFindAndModify: false => pour éviter les warnings concernant les méthodes de mongoose dépréciées
+  // Connexion à la base de données
   _connect() {
-    mongoose.connect(`mongodb://${server}/${database}`, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+    mongoose.connect(`mongodb://${server}/${database}`)
     //gestion des promesses et des erreurs
       .then(() => {
         console.log('La connexion à la bdd a réussi.')
       })
       .catch(err => {
-        console.error('La connexion à la bdd a échoué.')
+        console.error('La connexion à la bdd a échoué.');
+        console.error(err);
       })
   }
 }
