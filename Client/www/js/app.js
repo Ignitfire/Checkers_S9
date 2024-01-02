@@ -1,6 +1,8 @@
 import Jeu from './Jeu.js';
 import User from './User.js';
 import {showGame} from './View.js';
+const { io } = require("socket.io-client");
+
 
 // Affichage du damier seul
 console.log('app.js loaded')
