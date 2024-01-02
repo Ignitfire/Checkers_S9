@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "http": "^0.0.1-security",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.3",
+    "os": "^0.1.2",
+    "socket.io": "^4.7.2"
+  }
+}
