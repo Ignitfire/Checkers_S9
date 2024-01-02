@@ -1,7 +1,7 @@
 export class ViewLoginForm {
     constructor() {
         this.initForm();
-        this.initFormEvent();
+        this.initWaitingScreen();
         this.renderForm();
     }
 
@@ -10,44 +10,73 @@ export class ViewLoginForm {
         const form = document.createElement('form');
         form.id = 'loginForm';
 
-        form.innerHTML = `
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required><br>
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required><br>
-          <button type="submit">Login</button>
-          <p id="loginMessage"></p>
-        `;
+        // Create fieldset
+        const fieldset = document.createElement('fieldset');
+
+        // Create username input
+        const usernameLabel = document.createElement('label');
+        usernameLabel.textContent = 'Username:';
+        const usernameInput = document.createElement('input');
+        usernameInput.type = 'text';
+        usernameInput.name = 'username';
+        usernameInput.required = true;
+
+        // Create password input
+        const passwordLabel = document.createElement('label');
+        passwordLabel.textContent = 'Password:';
+        const passwordInput = document.createElement('input');
+        passwordInput.type = 'password';
+        passwordInput.name = 'password';
+        passwordInput.required = true;
+
+        // Create submit button
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Login';
+
+        // Append elements to fieldset
+        fieldset.appendChild(usernameLabel);
+        fieldset.appendChild(usernameInput);
+        fieldset.appendChild(document.createElement('br')); // Line break
+        fieldset.appendChild(passwordLabel);
+        fieldset.appendChild(passwordInput);
+        fieldset.appendChild(document.createElement('br')); // Line break
+        fieldset.appendChild(submitButton);
+
+        // Append elements to the form
+        form.appendChild(fieldset);
 
         this.form = form;
-    }
-
-    initFormEvent() {
-        this.form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            // Get username and password element
-            const usernameInput = document.getElementById("username");
-            const passwordInput = document.getElementById("password");
-
-            // Get username and password values
-            const username = usernameInput.value;
-            const password = passwordInput.value;
-
-            // Perform login validation or other actions here
-            // This is where you would typically make a request to your server for authentication
-
-            // For example, you can log the input values to the console for demonstration purposes
-            console.log('Username:', username);
-            console.log('Password:', password);
-
-            // Clear input fields after submission
-            usernameInput.value = '';
-            passwordInput.value = '';
-        });
+        this.usernameInput = usernameInput;
+        this.passwordInput = passwordInput;
     }
 
     renderForm() {
-        document.getElementById('main').appendChild(this.form);
+        const mainDiv = document.getElementById('main');
+        mainDiv.appendChild(this.form);
+        mainDiv.classList.add("loginForm");
+    }
+
+    initWaitingScreen() {
+        const div = document.createElement('div');
+        div.id = 'spinnerContainer';
+        div.innerHTML = `
+        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+           <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+        </svg>
+        <p>En attente de joueurs...</p>
+        `;
+
+        this.waitingScreen = div;
+    }
+
+    renderWaitingScreen() {
+        const mainDiv = document.getElementById('main');
+        mainDiv.classList.add('waitingScreen');
+        mainDiv.appendChild(this.waitingScreen);
+
+        // On désactive tous les éléments du fieldset
+        const fieldset = this.form.getElementsByTagName('fieldset')[0];
+        fieldset.disabled = true;
     }
 }

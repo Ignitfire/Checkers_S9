@@ -34,15 +34,15 @@ io.on("connection", function(socket) {
 
         // vérifie les rooms du socket 
         // TODO vérifier si socket.rooms est bien la bonne méthode ou socket adpater est mieux
-        var roomDispo = Object.keys(socket.adpater.rooms).filter(item => item!= socket.id); //on ne veut pas que le socket se connecte à lui-même 
+        var roomDispo = Object.keys(socket.adapter.rooms).filter(item => item != socket.id); //on ne veut pas que le socket se connecte à lui-même
         
         //on regarde si le socket est déjà dans une room
-        if (socket.adpater.rooms[roomDispo]) {
+        if (socket.adapter.rooms[roomDispo]) {
             //on le déconnecte de la room
             socket.leave(roomDispo);
         }
         
-        var obj = await user_manage.addJoueur(dataUser, socket, etat);
+        var obj = await user_gestion.addJoueur(dataUser, socket, etat);
 
         //on vérifie si il y a une erreur => on bloque et on renvoie l'erreur au client
         if (obj.error!=null) {
@@ -50,6 +50,7 @@ io.on("connection", function(socket) {
         } else {
             // déroulement normal
             listeAttente = obj.listeAttente;
+            console.log(obj);
 
             //on vérifie si il y a au moins 2 joueurs dans la liste d'attente
             if (listeAttente.length >=2) {
