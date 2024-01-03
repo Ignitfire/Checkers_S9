@@ -14,7 +14,7 @@ const User = UserModel.User
     * @return Un objet avec une erreur et un utilisateur
     */
 async function authenticate(data) {
-    const user = await User.findOne({ username: data.username }); //on cherche l'utilisateur dans la bdd 
+    const user = await User.findOne({ username: data.username }); // on cherche l'utilisateur dans la bdd
     if(!user) {
         console.log("Utilisateur non trouvé");
         return await create(data); 
@@ -33,7 +33,7 @@ async function authenticate(data) {
 
 async function create(data) {
     //on hash le mot de passe
-    const hashMdp = await bcrypt.hash(data.password, 10); //10 => nombre de tours de hashage 
+    const hashMdp = await bcrypt.hash(data.password, 10); //10 => nombre de tours de hashage
 
     //on créer une nouvelle instance de User => RENDRE LE MODELE UTILISATEUR VALABLE
     const user = new User({
@@ -41,7 +41,7 @@ async function create(data) {
         password: hashMdp,
         nbVictoires: 0,
         nbParties: 0
-    })
+    });
 
     //on sauvegarde l'utilisateur dans la bdd
     await user.save()
@@ -50,7 +50,7 @@ async function create(data) {
         })
         .catch(err => {
             console.log(err); //on affiche l'erreur
-        })
+        });
     return {error: "null", user: user}; //on retourne l'utilisateur et qu'il n'y a pas d'erreur
 
 }

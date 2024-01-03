@@ -19,7 +19,7 @@ socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
     viewLoginForm.form.addEventListener("submit", (e) => {
         e.preventDefault();
-        socket.emit("login", {name: viewLoginForm.usernameInput.value, password: viewLoginForm.passwordInput.value});
+        socket.emit("login", {username: viewLoginForm.usernameInput.value, password: viewLoginForm.passwordInput.value}, 0);
     });
 
     socket.on("attente", (message) => {
