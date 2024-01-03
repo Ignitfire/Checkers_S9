@@ -2,8 +2,7 @@
 let mongoose = require('mongoose');
 
 // Serveur de la bdd
-//TODO :
-//const server = "à_définir_adresse"; -----------------> A DEFINIR
+const server = "127.0.0.1:27017";
 // Nom de la bdd
 const database = 'jeu_dame';
 

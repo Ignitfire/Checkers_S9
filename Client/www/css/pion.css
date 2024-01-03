@@ -4,11 +4,11 @@
     width: 50px;
 }
 
-.pion.black {
+.pion.noir {
     background-color: black;
 }
 
-.pion.white {
+.pion.blanc {
     background-color: white;
 }
 
@@ -18,6 +18,6 @@
     line-height: 50px;
     text-align: center;
 }
-.black .dame {
+.noir .dame {
     color: white;
 }

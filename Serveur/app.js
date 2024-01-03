@@ -1,8 +1,14 @@
 // A FINIR !!!!!!!!!!!!!
 // <---- Dépendance --->
 //Node
-var server = require ("http").createServer();
-const io = require ("socket.io")(server);
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const server = createServer();
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:8000"
+    }
+});
 var user_gestion = require("./gestions/user_gestion");
 var bdd_connexion = require("./connexion_bdd");
 var room = require("./room");
@@ -28,15 +34,15 @@ io.on("connection", function(socket) {
 
         // vérifie les rooms du socket 
         // TODO vérifier si socket.rooms est bien la bonne méthode ou socket adpater est mieux
-        var roomDispo = Object.keys(socket.adpater.rooms).filter(item => item!= socket.id); //on ne veut pas que le socket se connecte à lui-même 
+        const roomDispo = Object.keys(socket.adapter.rooms).filter(item => item !== socket.id); //on ne veut pas que le socket se connecte à lui-même
         
         //on regarde si le socket est déjà dans une room
-        if (socket.adpater.rooms[roomDispo]) {
+        if (socket.adapter.rooms[roomDispo]) {
             //on le déconnecte de la room
             socket.leave(roomDispo);
         }
         
-        var obj = await user_manage.addJoueur(dataUser, socket, etat);
+        const obj = await user_gestion.addJoueur(dataUser, socket, etat);
 
         //on vérifie si il y a une erreur => on bloque et on renvoie l'erreur au client
         if (obj.error!=null) {
@@ -52,7 +58,7 @@ io.on("connection", function(socket) {
                 //On créer la nouvelle partie en bdd
                 await game_gestion.newGame(listeAttente[0].name, listeAttente[1].name);
 
-                var color = game_gestion.selectColor();
+                const color = game_gestion.selectColor();
 
                 //On incrémente le nombre de parties jouées des joueurs
                 user_gestion.addPartie(listeAttente[0].name);
@@ -93,7 +99,7 @@ io.on("connection", function(socket) {
 
     // se contente de renvoyer le mouvement à l'autre joueur, l'inversement est fait coté client
     socket.on("deplacement-move", function (move) {
-        var currentRoom = Object.keys(socket.rooms).filter(item => item!= socket.id); //on ne veut pas que le socket se connecte à lui-même
+        const currentRoom = Object.keys(socket.rooms).filter(item => item !== socket.id); //on ne veut pas que le socket se connecte à lui-même
         //on récupère le mouvement du joueur
         var move = JSON.parse(move);
         //on envoie le mouvement à l'autre joueur
@@ -116,11 +122,11 @@ io.on("connection", function(socket) {
     socket.on("disconnect", function () {
         user_gestion.JoueurDeco(socket);
         //on récupère la partie dans laquelle se trouve le joueur qui s'est déconnecté
-        game = game_gestion.findGame(socket.id);
+        const game = game_gestion.findGame(socket.id);
         //Si la partie existe
-            if (game != undefined) {
+            if (game !== undefined || typeof game !== 'undefined') {
                 //on regarde si le joueur qui s'est déconnecté est le joueur 1
-                if (socket.id == game.idJ1) {
+                if (socket.id === game.idJ1) {
                     //on envoie un message au joueur 2 pour lui dire que son adversaire s'est déconnecté
                     io.to(`${game.idJ2}`).emit("deconnexion", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J2);
                 }

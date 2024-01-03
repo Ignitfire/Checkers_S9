@@ -1,6 +1,4 @@
-import Case from "./Case.js";
 import Move from "./Move.js";
-import {showPossibleMoves} from "./View.js";
 
 export default class Pion {
 
@@ -19,7 +17,7 @@ export default class Pion {
         this.player = player;
         this.level = 0;
         this.status = 0;
-        this.color = player.playerNumber === 1 ? "white" : "black";
+        this.color = player.color;
         this.c = c;
     }
 

@@ -4,7 +4,7 @@ async function addRoom(socket) {
     //on va parcourir les rooms
     for (var i =0; i < 100; i++) {
         //on vérifie si la room existe ou pas
-        if (socket.adpter.rooms ['room' +i] == undefined) {
+        if (socket.adapter.rooms ['room' +i] === undefined) {
             //cas où la room n'existe pas donc on rajoute le joueur
             await socket.join("room" + i);
             break;
