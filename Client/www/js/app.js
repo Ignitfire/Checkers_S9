@@ -1,25 +1,19 @@
 import Jeu from './Jeu.js';
 import User from './User.js';
-import {showGame} from './View.js';
-
 const socket = io("http://192.168.1.10:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
-/*
-// Initialisation des utilisateurs (A récupérer plus tard par le webSocket)
-let user1 = new User("Joueur1");
-let user2 = new User("Joueur2");
-
-// Initialisation du jeu
-let game = new Jeu(user1, user2);
-
-// Affichage des pions du jeu
-showGame(game);*/
+import {ViewGame} from "./views/view.game.js";
+import Joueur from "./Joueur.js";
 
 socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
+    let gameView;
+    let currentUserData;
+
     viewLoginForm.form.addEventListener("submit", (e) => {
         e.preventDefault();
-        socket.emit("login", {username: viewLoginForm.usernameInput.value, password: viewLoginForm.passwordInput.value}, 0);
+        currentUserData = viewLoginForm.getUser();
+        socket.emit("login", {username: currentUserData.username, password: currentUserData.password}, 0);
     });
 
     socket.on("attente", (message) => {
@@ -28,7 +22,28 @@ socket.on("connection", () => {
     });
 
     socket.on("start game", (message) => {
-        console.log('Start Game !');
-        console.log(message);
+        message = JSON.parse(message);
+
+        // Initialisation des utilisateurs (A récupérer plus tard par le webSocket)
+        let currentUser = new User(currentUserData.username);
+        let opponentUser = new User(message.adversaire);
+        let joueur1;
+        let joueur2;
+
+        if (message.color === 'noir') {
+            joueur1 = new Joueur(opponentUser, 'blanc');
+            joueur2 = new Joueur(currentUser, message.color);
+        } else {
+            joueur1 = new Joueur(currentUser, message.color);
+            joueur2 = new Joueur(opponentUser, 'noir');
+        }
+
+        // Initialisation du jeu
+        let game = new Jeu(joueur1, joueur2);
+
+        viewLoginForm.clearRender();
+
+        // Affichage des pions du jeu
+        gameView = new ViewGame(game);
     });
 });

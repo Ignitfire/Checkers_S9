@@ -1,7 +1,6 @@
 export class ViewLoginForm {
     constructor() {
         this.initForm();
-        this.initWaitingScreen();
         this.renderForm();
     }
 
@@ -71,6 +70,8 @@ export class ViewLoginForm {
     }
 
     renderWaitingScreen() {
+        this.initWaitingScreen();
+
         const mainDiv = document.getElementById('main');
         mainDiv.classList.add('waitingScreen');
         mainDiv.appendChild(this.waitingScreen);
@@ -78,5 +79,22 @@ export class ViewLoginForm {
         // On désactive tous les éléments du fieldset
         const fieldset = this.form.getElementsByTagName('fieldset')[0];
         fieldset.disabled = true;
+    }
+
+    clearRender() {
+        const mainDiv = document.getElementById('main');
+        mainDiv.removeChild(this.form);
+        mainDiv.classList.remove('loginForm');
+        if (!!this.waitingScreen) {
+            mainDiv.removeChild(this.waitingScreen);
+            mainDiv.classList.remove('waitingScreen');
+        }
+    }
+
+    getUser() {
+        return {
+            username: this.usernameInput.value,
+            password: this.passwordInput.value
+        };
     }
 }

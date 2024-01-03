@@ -1,15 +1,15 @@
 //<--- Module dependencies --->//
-var userServices = require('../user_service');
+const user_service = require('../user_service');
 
 //<-- Variables globales -->//
 let listeAttente = [];
-var error;
+let error;
 
 //<--- Fonctions --->//
 //TODO: fonction d'historique des parties 
 
-function GetNbVictoires(name) {
-    userServices.getUserNbVictory(pseudo)
+function getNbVictoire(name) {
+    user_service.getUserNbVictory(pseudo)
     .then(data => {
       console.log( pseudo + " a gagné " + data[0].nbVictoire + " fois.");
     })
@@ -43,7 +43,7 @@ function addPartie (name) {
  * Fonction asynchrone car on attend la réponse de la bdd
  */
 async function getAllUserScore() {
-    return await userServices.getAllUserScore();
+    return await user_service.getAllUserScore();
 }
 
 /**
@@ -79,7 +79,7 @@ function JoueurDeco (socket) {
 
 async function addJoueur (data, socket, etat) {
     if (etat == 0) {
-        const userPromise = await userServices.authenticate(data);
+        const userPromise = await user_service.authenticate(data);
         if (userPromise.error == null) {
             //Si une erreur est retourner, on attribue le message à notre variable error
             error = userPromise.error;
@@ -104,4 +104,4 @@ exports.JoueurCo = JoueurCo;
 exports.getAllUserScore = getAllUserScore;
 exports.addPartie = addPartie;
 exports.addVictoire = addVictoire;
-exports.GetNbVictoires = GetNbVictoires;
+exports.getNbVictoire = getNbVictoire;

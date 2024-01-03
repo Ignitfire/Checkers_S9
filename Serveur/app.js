@@ -124,7 +124,7 @@ io.on("connection", function(socket) {
         //on récupère la partie dans laquelle se trouve le joueur qui s'est déconnecté
         const game = game_gestion.findGame(socket.id);
         //Si la partie existe
-            if (game !== undefined && typeof game !== undefined) {
+            if (game !== undefined || typeof game !== 'undefined') {
                 //on regarde si le joueur qui s'est déconnecté est le joueur 1
                 if (socket.id === game.idJ1) {
                     //on envoie un message au joueur 2 pour lui dire que son adversaire s'est déconnecté

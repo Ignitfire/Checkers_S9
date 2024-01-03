@@ -26,16 +26,17 @@ export default class Joueur {
     /**
      *
      * @param user User
-     * @param playerNumber int
+     * @param color blanc ou noir
      */
-    constructor(user, playerNumber) {
+    constructor(user, color) {
         this.user = user;
-        this.playerNumber = playerNumber;
-        if (playerNumber === 1) {
-            this.color = "white";
+        if (color === 'blanc') {
+            this.playerNumber = 1;
+            this.color = 'blanc';
             this.promotionRow = 9;
         } else {
-            this.color = "black";
+            this.playerNumber = 2;
+            this.color = 'noir';
             this.promotionRow = 0;
         }
     }

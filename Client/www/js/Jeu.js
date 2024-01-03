@@ -1,7 +1,4 @@
-import Joueur from "./Joueur.js";
 import Damier from "./Damier.js";
-
-
 export default class Jeu {
     Joueur1;
     Joueur2;
@@ -18,15 +15,9 @@ export default class Jeu {
     //** booléen de fin de partie */
     end = false;
 
-    constructor(user1, user2) {
-        let randomizer = Math.round(Math.random());
-        if (randomizer == 0) {
-            this.Joueur1 = new Joueur(user1, 1);
-            this.Joueur2 = new Joueur(user2, 2);
-        } else {
-            this.Joueur1 = new Joueur(user2, 1);
-            this.Joueur2 = new Joueur(user1, 2);
-        }
+    constructor(player1, player2) {
+        this.Joueur1 = player1;
+        this.Joueur2 = player2;
         this.plateau = new Damier(this.Joueur1, this.Joueur2);
     }
 

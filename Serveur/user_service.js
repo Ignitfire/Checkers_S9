@@ -43,6 +43,8 @@ async function create(data) {
         nbParties: 0
     });
 
+    console.log(user);
+
     //on sauvegarde l'utilisateur dans la bdd
     await user.save()
         .then(() => {
