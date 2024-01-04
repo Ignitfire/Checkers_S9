@@ -1,9 +1,9 @@
 //<==== Services gestion utilisateurs basé sur le modèle User.js===>
 // <---- Dépendances ---->
+const { Partie } = require("./models/game_model");
 const UserModel = require("./models/user_model");
 const bcrypt = require("bcryptjs"); //pour le hashage du mot de passe. bycryptjs permet d'éviter les problèmes de dépendances => bycrypt est lié nativement à node
 const User = UserModel.User
-const Partie = game_model.Partie;
 
 // <---- Fonctions ---->
 
