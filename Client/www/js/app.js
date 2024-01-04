@@ -1,10 +1,9 @@
-import Jeu from './Jeu.js';
-import User from './User.js';
+import Jeu from './models/Jeu.js';
+import User from './models/User.js';
 const socket = io("http://192.168.1.10:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
 import {ViewGame} from "./views/view.game.js";
-import Joueur from "./Joueur.js";
-import Move from "./Move.js";
+import Joueur from "./models/Joueur.js";
 
 socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();

@@ -1,20 +1,35 @@
-.case {
+#damier table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+#damier table tr {
+    width: 100%;
+}
+
+td.case {
     height: 50px;
-    width: 50px;
+    width: 10%;
 }
 
-.case.brown {
-    background-color: brown;
+td.case.border {
+    background-color: #492d22;
+    color: #ffd89b;
+    text-align: center;
 }
 
-.case.beige {
-    background-color: beige;
+td.case.brown {
+    background-color: #68432f;
 }
 
-.case.brown.possibleMove, .case.white.possibleMove {
+td.case.beige {
+    background-color: #ffd89b;
+}
+
+td.case.brown.possibleMove, td.case.white.possibleMove {
     background-color: green;
 }
 
-.case.brown.possibleMove.take, .case.white.possibleMove.take {
+td.case.brown.possibleMove.take, td.case.white.possibleMove.take {
     background: orange;
 }

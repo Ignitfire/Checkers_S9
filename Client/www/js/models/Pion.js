@@ -1,5 +1,3 @@
-import Move from "./Move.js";
-
 export default class Pion {
 
     // le joueur a qui le pion appartient

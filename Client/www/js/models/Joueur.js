@@ -33,12 +33,18 @@ export default class Joueur {
         if (color === 'blanc') {
             this.playerNumber = 1;
             this.color = 'blanc';
-            this.promotionRow = 9;
+            this.promotionRow = 8;
         } else {
             this.playerNumber = 2;
             this.color = 'noir';
-            this.promotionRow = 0;
+            this.promotionRow = 1;
         }
+    }
+
+    getPionsRestants() {
+        return this.pions.filter((pion) => {
+            return !!pion.c;
+        }).length;
     }
 
     /** si un autre coup possible met les valeurs de coups possibles à jour et renvoie true, sinon renvoie false */

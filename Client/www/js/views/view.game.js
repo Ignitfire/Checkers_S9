@@ -1,4 +1,14 @@
 export class ViewGame {
+    alphabet = {
+        1:'A',
+        2:'B',
+        3:'C',
+        4:'D',
+        5:'E',
+        6:'F',
+        7:'G',
+        8:'H',
+    }
     constructor(game) {
         this.initGame(game);
         this.renderGame();
@@ -6,6 +16,7 @@ export class ViewGame {
 
     initGame(game) {
         this.game = game;
+        this.mainDiv = document.getElementById('main');
         this.initDamier();
     }
 
@@ -21,9 +32,19 @@ export class ViewGame {
             let tr = document.createElement("tr");
             for (let j = 0; j < 10; j++) {
                 let td = document.createElement("td");
-                td.id = "case" + i + j;
                 td.classList.add("case");
-                (i + j) % 2 === 0 ? td.classList.add("beige") : td.classList.add("brown");
+                if (i === 0 || i === 9) {
+                    td.classList.add('border');
+                    td.innerText = j > 0 && j < 9 ? j : '';
+                } else {
+                    if (j === 0 || j === 9) {
+                        td.classList.add('border');
+                        td.innerText = this.alphabet[i];
+                    } else {
+                        td.id = "case" + i + j;
+                        (i + j) % 2 === 0 ? td.classList.add("beige") : td.classList.add("brown");
+                    }
+                }
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
@@ -35,8 +56,43 @@ export class ViewGame {
     }
 
     renderGame() {
+        this.renderInterface();
         this.renderDamier();
         this.renderPawns();
+    }
+
+    renderInterface() {
+        const bandeauHaut = document.createElement('div');
+        bandeauHaut.id = 'bandeauhaut';
+
+        this.renderInfoJoueur(this.game.Joueur1, bandeauHaut);
+        this.renderInfoJoueur(this.game.Joueur2, bandeauHaut);
+
+        this.mainDiv.appendChild(bandeauHaut);
+    }
+
+    renderInfoJoueur(joueur, container = null) {
+        const joueurDiv = document.createElement('div');
+        joueurDiv.id = joueur.user.name;
+        joueurDiv.classList.add('joueur');
+
+        const joueurPseudo = document.createElement('span');
+        joueurPseudo.classList.add('joueur-pseudo');
+        joueurPseudo.innerText = joueur.user.name;
+
+        const joueurCouleur = document.createElement('span');
+        joueurCouleur.classList.add('joueur-couleur');
+        joueurCouleur.innerText = joueur.color;
+
+        const joueurNbPion = document.createElement('span');
+        joueurNbPion.classList.add('joueur-nombre-pion');
+        joueurNbPion.innerText = joueur.getPionsRestants();
+
+        joueurDiv.appendChild(joueurPseudo);
+        joueurDiv.appendChild(joueurCouleur);
+        joueurDiv.appendChild(joueurNbPion);
+
+        !!container ? container.appendChild(joueurDiv) : this.mainDiv.appendChild(joueurDiv);
     }
 
     renderDamier() {
