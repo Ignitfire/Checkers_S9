@@ -100,8 +100,6 @@ io.on("connection", function(socket) {
     // se contente de renvoyer le mouvement à l'autre joueur, l'inversement est fait coté client
     socket.on("deplacement-move", function (move) {
         const currentRoom = Object.keys(socket.rooms).filter(item => item !== socket.id); //on ne veut pas que le socket se connecte à lui-même
-        //on récupère le mouvement du joueur
-        var move = JSON.parse(move);
         //on envoie le mouvement à l'autre joueur
         socket.to(currentRoom).emit("deplacement-move", move);
         

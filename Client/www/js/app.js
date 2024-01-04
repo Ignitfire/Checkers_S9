@@ -4,11 +4,13 @@ const socket = io("http://192.168.1.10:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
 import {ViewGame} from "./views/view.game.js";
 import Joueur from "./Joueur.js";
+import Move from "./Move.js";
 
 socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
     let gameView;
     let currentUserData;
+    let game;
 
     viewLoginForm.form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -42,11 +44,22 @@ socket.on("connection", () => {
         }
 
         // Initialisation du jeu
-        let game = new Jeu(joueur1, joueur2, currentPlayer);
+        game = new Jeu(joueur1, joueur2, currentPlayer);
 
+        // On supprime l'affichage de la waiting screen et/ou du formulaire
         viewLoginForm.clearRender();
 
         // Affichage des pions du jeu
         gameView = new ViewGame(game);
+
+        game.deplacementEvent.addEventListener('deplacement-move', (e) => {
+            socket.emit('deplacement-move', e.detail);
+        });
     });
+
+    socket.on("deplacement-move", (moveData) => {
+        const pawn = game.executeMove(moveData);
+        gameView.movePawn(pawn, moveData);
+        game.tourSuivant();
+    })
 });

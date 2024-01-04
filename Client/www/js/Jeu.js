@@ -6,6 +6,7 @@ export default class Jeu {
     tour;
     joueurCourant;
     joueurQuiJoue;
+    deplacementEvent;
 
     constructor(player1, player2, joueurCourant) {
         this.Joueur1 = player1;
@@ -14,6 +15,7 @@ export default class Jeu {
         this.tour = 1;
         this.joueurCourant = joueurCourant;
         this.joueurQuiJoue = this.Joueur1;
+        this.deplacementEvent = new EventTarget();
     }
 
     doesCurrentPlayerCanPlay() {
@@ -24,24 +26,27 @@ export default class Jeu {
         return pawn.color === this.joueurCourant.color;
     }
 
-    checkEnd() {
-        if (this.checkVictory()) return true //TODO Renvoie la fonction de victoire du joueur concernée;
+    executeMove(move) {
+        const ancienneCase = this.plateau.getCaseFromCoord(move.ancienneCase); // On récupère la case du plateau depuis laquelle un pion adverse a été bougé
+        const prochaineCase = this.plateau.getCaseFromCoord(move.prochaineCase); // On récupère la case du plateau vers laquelle un pion adverse a été bougé
+        const pionABouger = ancienneCase.pion; // On récupère le pion bougé
+
+        pionABouger.c.setPawn(null); // On supprime le pion de l'ancienne case
+        pionABouger.c = prochaineCase; // On déplace le pion vers la prochaine case
+        if (pionABouger.isOnPromotionRow()) pionABouger.level = 1; // Si le pion est sur une case qui le fait devenir reine, alors on le pion devient reine
+        prochaineCase.setPawn(pionABouger); // On informe la nouvelle case qu'elle a un pion
+        if (!!move.casePionAPrendre) {
+            const casePionAPrendre = this.plateau.getCaseFromCoord(move.casePionAPrendre);
+            casePionAPrendre.pion.c = null;
+            casePionAPrendre.setPawn(null);
+        }
+
+        return pionABouger;
     }
 
-    /** fonction de tour, active l'action pour un joueur */
-    tour() {
-        while (!end)
-            if (this.turn == 1) {
-                end = !this.Joueur1.tour(this.plateau);
-                if (end) lauchEnd(1);
-                // le joueur 1 joue
-                this.turn = 2;
-            } else {
-                end = !this.Joueur2.tour(this.plateau);
-                if (end) lauchEnd(2);
-                // le joueur 2 joue
-                this.turn = 1;
-            }
-        //TODO si les conditions de fin de partie sont réunies, end = true
+    tourSuivant() {
+        this.tour++;
+        this.joueurQuiJoue = this.joueurQuiJoue === this.Joueur1 ? this.Joueur2 : this.Joueur1;
+        console.log("C'est au tour des " + this.joueurQuiJoue.color + "s de jouer");
     }
 }

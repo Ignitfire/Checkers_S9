@@ -56,6 +56,10 @@ export default class Case {
         if (name === "DownLeft")
             return this.getDownLeft();
         if (name === "DownRight")
-        return this.getDownRight();
+            return this.getDownRight();
+    }
+
+    getCoord() {
+        return {x: this.x, y: this.y};
     }
 }
