@@ -1,5 +1,6 @@
 import Jeu from './models/Jeu.js';
 import User from './models/User.js';
+
 const socket = io("http://192.168.1.10:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
 import {ViewGame} from "./views/view.game.js";
@@ -15,6 +16,11 @@ socket.on("connection", () => {
         e.preventDefault();
         currentUserData = viewLoginForm.getUser();
         socket.emit("login", {username: currentUserData.username, password: currentUserData.password}, 0);
+    });
+
+    socket.on("error login", (error) => {
+        console.log(error);
+        viewLoginForm.renderError(error);
     });
 
     socket.on("attente", (message) => {
