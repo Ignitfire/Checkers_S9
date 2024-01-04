@@ -3,31 +3,25 @@ export default class Jeu {
     Joueur1;
     Joueur2;
     plateau;
+    tour;
+    joueurCourant;
+    joueurQuiJoue;
 
-    //**Conserve un historique des coups joués, pour pouvoir revenir en arrière
-    Moves = [];
-    //** nombre de tours sans prises */
-    turnCounter = 0;
-    //** numéro du tour en cours */
-    turnCounter = 0;
-    //** booléen du tour en cours, à le même indicateur que le joueur qui doit jouer */
-    turnIndicator = 1;
-    //** booléen de fin de partie */
-    end = false;
-
-    constructor(player1, player2) {
+    constructor(player1, player2, joueurCourant) {
         this.Joueur1 = player1;
         this.Joueur2 = player2;
         this.plateau = new Damier(this.Joueur1, this.Joueur2);
+        this.tour = 1;
+        this.joueurCourant = joueurCourant;
+        this.joueurQuiJoue = this.Joueur1;
     }
 
-    checkVictory() {
-        // plus de pions ou plus de coups possibles, la defaite par abandon est géré ailleurs
+    doesCurrentPlayerCanPlay() {
+        return this.joueurCourant === this.joueurQuiJoue;
     }
 
-    checkDraw() {
-        // 3 repetitions des deux cotés ou 25 tours sans prises
-
+    isPawnOfCurrentPlayer(pawn) {
+        return pawn.color === this.joueurCourant.color;
     }
 
     checkEnd() {

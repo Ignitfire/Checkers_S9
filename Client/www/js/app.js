@@ -29,17 +29,20 @@ socket.on("connection", () => {
         let opponentUser = new User(message.adversaire);
         let joueur1;
         let joueur2;
+        let currentPlayer;
 
         if (message.color === 'noir') {
             joueur1 = new Joueur(opponentUser, 'blanc');
             joueur2 = new Joueur(currentUser, message.color);
+            currentPlayer = joueur2;
         } else {
             joueur1 = new Joueur(currentUser, message.color);
             joueur2 = new Joueur(opponentUser, 'noir');
+            currentPlayer = joueur1;
         }
 
         // Initialisation du jeu
-        let game = new Jeu(joueur1, joueur2);
+        let game = new Jeu(joueur1, joueur2, currentPlayer);
 
         viewLoginForm.clearRender();
 
