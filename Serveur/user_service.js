@@ -3,6 +3,7 @@
 const UserModel = require("./models/user_model");
 const bcrypt = require("bcryptjs"); //pour le hashage du mot de passe. bycryptjs permet d'éviter les problèmes de dépendances => bycrypt est lié nativement à node
 const User = UserModel.User
+const Partie = game_model.Partie;
 
 // <---- Fonctions ---->
 
@@ -64,12 +65,21 @@ async function create(data) {
  * @returns renvoie une liste d'utilisateurs => JSON
  * */
 async function getAllUserScore() {
-    return await User.find({}, ['name', 'nbVictoires', 'nbParties']);
+    return await User.find({}, ['username', 'nbVictoires', 'nbParties']);
     // => fonctionne si on change le modèle de User pour ajouter les champs nbVictoires et nbParties
 }
 
 async function getUserVictoires(username) {
     return await User.findOne({ username: username }, ['nbVictoires']);
+}
+/**
+ * function qui récupère l'historique des parties d'un joueur
+ * @param {*} username 
+ * @returns renvoie une liste de partie => JSON. La liste est triée par date de la plus récente à la plus ancienne
+ */
+async function getPlayerGameHistory(username) {
+    return await Partie.find({ $or: [{ joueur1: username }, { joueur2: username }] },
+        ['joueur1', 'joueur2', 'gagnant', 'datePartie']), sort({ datePartie: -1 });
 }
 
 async function updateVictoire(username) {
@@ -91,3 +101,4 @@ exports.getAllUserScore = getAllUserScore;
 exports.getUserVictoires = getUserVictoires;
 exports.updateVictoire = updateVictoire;
 exports.updatePartie = updatePartie;
+exports.getPlayerGameHistory = getPlayerGameHistory;

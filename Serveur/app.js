@@ -119,6 +119,12 @@ io.on("connection", function(socket) {
         });
     });
 
+    socket.on("historique", function (username) {
+        user_gestion.getPlayerGameHistory(username).then(data => {
+            socket.emit("historique", data);
+        });
+    });
+
     socket.on("disconnect", function () {
         user_gestion.JoueurDeco(socket);
         //on récupère la partie dans laquelle se trouve le joueur qui s'est déconnecté

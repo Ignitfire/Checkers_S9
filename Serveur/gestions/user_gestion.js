@@ -46,6 +46,10 @@ async function getAllUserScore() {
     return await user_service.getAllUserScore();
 }
 
+async function getPlayerGameHistory(username) {
+    return await user_service.getPlayerGameHistory(username);
+}
+
 /**
  * Ajout d'un joueur dans la liste d'attente
  * @param socket socket du joueur
@@ -105,3 +109,4 @@ exports.getAllUserScore = getAllUserScore;
 exports.addPartie = addPartie;
 exports.addVictoire = addVictoire;
 exports.getNbVictoire = getNbVictoire;
+exports.getPlayerGameHistory = getPlayerGameHistory;
