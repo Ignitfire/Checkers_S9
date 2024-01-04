@@ -38,14 +38,6 @@ export default class Damier {
         }
     }
 
-    getPion(x, y) {
-        return this.cases.find(c => c.x == x && c.y == y).pion;
-    }
-
-    getCase(x, y) {
-        return this.cases.find(c => c.x == x && c.y == y);
-    }
-
     /**
      * Retourne la case du plateau par rapport à des coordonnées données
      *
