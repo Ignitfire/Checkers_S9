@@ -59,3 +59,11 @@ td.case.brown.possibleMove, td.case.white.possibleMove {
 td.case.brown.possibleMove.take, td.case.white.possibleMove.take {
     background: orange;
 }
+
+@media (max-width:600px)  {
+    #damier {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+}
