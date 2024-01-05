@@ -66,5 +66,6 @@ socket.on("connection", () => {
         const pawn = game.executeMove(moveData);
         gameView.movePawn(pawn, moveData);
         game.tourSuivant();
+        gameView.refreshJoueurQuiJoue();
     })
 });

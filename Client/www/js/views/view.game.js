@@ -62,13 +62,20 @@ export class ViewGame {
     }
 
     renderInterface() {
+        this.mainDiv.classList.add('game');
+
         const bandeauHaut = document.createElement('div');
         bandeauHaut.id = 'bandeauhaut';
 
         this.renderInfoJoueur(this.game.Joueur1, bandeauHaut);
         this.renderInfoJoueur(this.game.Joueur2, bandeauHaut);
 
+        const informationDiv = document.createElement('div');
+        informationDiv.id = 'information';
+        informationDiv.innerHTML = `C'est à <span class="joueurCourant">` + this.game.joueurQuiJoue.user.name + `</span> de jouer !`;
+
         this.mainDiv.appendChild(bandeauHaut);
+        this.mainDiv.appendChild(informationDiv);
     }
 
     renderInfoJoueur(joueur, container = null) {
@@ -152,8 +159,15 @@ export class ViewGame {
                 this.game.deplacementEvent.dispatchEvent(eventToSend);
                 // On passe au tour suivant
                 this.game.tourSuivant();
+                // On refresh l'affichage du joueur qui doit jouer
+                this.refreshJoueurQuiJoue();
             });
         });
+    }
+
+    refreshJoueurQuiJoue() {
+        const informationDiv = document.querySelector('#information .joueurCourant');
+        informationDiv.innerText = this.game.joueurQuiJoue.user.name;
     }
 
     cleanPossibleMoves() {
