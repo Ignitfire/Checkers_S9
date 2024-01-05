@@ -1,11 +1,30 @@
 export class ViewGame {
+    alphabet = {
+        1:'A',
+        2:'B',
+        3:'C',
+        4:'D',
+        5:'E',
+        6:'F',
+        7:'G',
+        8:'H',
+    }
+    game;
+    mainDiv;
+    damier;
+    pionContent;
+    dameContent;
+
     constructor(game) {
         this.initGame(game);
-        this.renderGame();
+        this.initPion()
+            .then(this.renderGame.bind(this));
+        this.initDame();
     }
 
     initGame(game) {
         this.game = game;
+        this.mainDiv = document.getElementById('main');
         this.initDamier();
     }
 
@@ -21,9 +40,19 @@ export class ViewGame {
             let tr = document.createElement("tr");
             for (let j = 0; j < 10; j++) {
                 let td = document.createElement("td");
-                td.id = "case" + i + j;
                 td.classList.add("case");
-                (i + j) % 2 === 0 ? td.classList.add("beige") : td.classList.add("brown");
+                if (i === 0 || i === 9) {
+                    td.classList.add('border');
+                    td.innerText = j > 0 && j < 9 ? j : '';
+                } else {
+                    if (j === 0 || j === 9) {
+                        td.classList.add('border');
+                        td.innerText = this.alphabet[i];
+                    } else {
+                        td.id = "case" + i + j;
+                        (i + j) % 2 === 0 ? td.classList.add("beige") : td.classList.add("brown");
+                    }
+                }
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
@@ -34,9 +63,76 @@ export class ViewGame {
         this.damier = damier;
     }
 
+    initPion() {
+        return this.fetchSVG('../../img/svg/pion.svg')
+            .then((svgText) => {
+                this.pionContent = svgText;
+            });
+    }
+
+    initDame() {
+        return this.fetchSVG('../../img/svg/dame.svg')
+            .then((svgText) => {
+                this.dameContent = svgText;
+            });
+    }
+
+    fetchSVG(svgFileUrl) {
+        return fetch(svgFileUrl)
+            .then(response => response.text())
+            .then(svgText => {
+                return svgText; // Return the SVG content if needed
+            })
+            .catch(error => {
+                console.error('Error fetching the SVG file:', error);
+            });
+    }
+
     renderGame() {
+        this.renderInterface();
         this.renderDamier();
         this.renderPawns();
+    }
+
+    renderInterface() {
+        this.mainDiv.classList.add('game');
+
+        const bandeauHaut = document.createElement('div');
+        bandeauHaut.id = 'bandeauhaut';
+
+        this.renderInfoJoueur(this.game.Joueur1, bandeauHaut);
+        this.renderInfoJoueur(this.game.Joueur2, bandeauHaut);
+
+        const informationDiv = document.createElement('div');
+        informationDiv.id = 'information';
+        informationDiv.innerHTML = `C'est à <span class="joueurCourant">` + this.game.joueurQuiJoue.user.name + `</span> de jouer !`;
+
+        this.mainDiv.appendChild(bandeauHaut);
+        this.mainDiv.appendChild(informationDiv);
+    }
+
+    renderInfoJoueur(joueur, container = null) {
+        const joueurDiv = document.createElement('div');
+        joueurDiv.id = joueur.user.name;
+        joueurDiv.classList.add('joueur');
+
+        const joueurPseudo = document.createElement('span');
+        joueurPseudo.classList.add('joueur-pseudo');
+        joueurPseudo.innerText = joueur.user.name;
+
+        const joueurCouleur = document.createElement('span');
+        joueurCouleur.classList.add('joueur-couleur');
+        joueurCouleur.innerText = joueur.color;
+
+        const joueurNbPion = document.createElement('span');
+        joueurNbPion.classList.add('joueur-nombre-pion');
+        joueurNbPion.innerText = joueur.getPionsRestants();
+
+        joueurDiv.appendChild(joueurPseudo);
+        joueurDiv.appendChild(joueurCouleur);
+        joueurDiv.appendChild(joueurNbPion);
+
+        !!container ? container.appendChild(joueurDiv) : this.mainDiv.appendChild(joueurDiv);
     }
 
     renderDamier() {
@@ -54,16 +150,17 @@ export class ViewGame {
     }
 
     renderPawn(pawn) {
-        const pion = document.createElement("div");
+        const pionContent = pawn.level === 1 ? this.dameContent : this.pionContent;
+        const parser = new DOMParser();
+        const svgDocument = parser.parseFromString(pionContent, 'image/svg+xml');
+        const pion = svgDocument.documentElement;
         pion.id = "pion" + pawn.c.x + pawn.c.y;
-        pion.classList.add("pion");
         pion.classList.add(pawn.color);
 
         if (pawn.level === 1) {
-            const dame = document.createElement("div");
-            dame.classList.add("dame");
-            dame.textContent = "D";
-            pion.appendChild(dame);
+            pion.classList.add("dame");
+        } else {
+            pion.classList.add("pion");
         }
 
         pion.addEventListener('click', (e) => {
@@ -96,8 +193,15 @@ export class ViewGame {
                 this.game.deplacementEvent.dispatchEvent(eventToSend);
                 // On passe au tour suivant
                 this.game.tourSuivant();
+                // On refresh l'affichage du joueur qui doit jouer
+                this.refreshJoueurQuiJoue();
             });
         });
+    }
+
+    refreshJoueurQuiJoue() {
+        const informationDiv = document.querySelector('#information .joueurCourant');
+        informationDiv.innerText = this.game.joueurQuiJoue.user.name;
     }
 
     cleanPossibleMoves() {

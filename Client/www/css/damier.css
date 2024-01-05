@@ -1,0 +1,69 @@
+#main.game {
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+#bandeauhaut {
+    display: flex;
+    padding: 1rem;
+}
+
+#bandeauhaut .joueur {
+    display: flex;
+    justify-content: space-evenly;
+    width: 50%;
+    padding: 1rem;
+}
+
+#information {
+    text-align: center;
+    padding: 1rem;
+}
+
+#information span.joueurCourant {
+    font-weight: bold;
+}
+
+#damier table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+#damier table tr {
+    width: 100%;
+}
+
+td.case {
+    height: 50px;
+    width: 10%;
+}
+
+td.case.border {
+    background-color: #492d22;
+    color: #ffd89b;
+    text-align: center;
+}
+
+td.case.brown {
+    background-color: #68432f;
+}
+
+td.case.beige {
+    background-color: #ffd89b;
+}
+
+td.case.brown.possibleMove, td.case.white.possibleMove {
+    background-color: green;
+}
+
+td.case.brown.possibleMove.take, td.case.white.possibleMove.take {
+    background: orange;
+}
+
+@media (max-width:600px)  {
+    #damier {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+}

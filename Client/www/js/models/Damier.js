@@ -16,17 +16,17 @@ export default class Damier {
     constructor(j1, j2) {
         this.cases = [];
         let White = false;
-        for (let i = 0; i < 10; i++) {
+        for (let i = 1; i <= 8; i++) {
             White = !White;
-            for (let j = 0; j < 10; j++) {
+            for (let j = 1; j <= 8; j++) {
                 if (!White) {
                     let c = new Case(i, j, this);
                     let pion = null;
-                    if (i < 4) {
+                    if (i <= 3) {
                         pion = new Pion(i, j, j1, c);
                         j1.pions.push(pion);
                     }
-                    if (i > 5) {
+                    if (i >= 6) {
                         pion = new Pion(i, j, j2, c);
                         j2.pions.push(pion);
                     }

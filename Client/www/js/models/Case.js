@@ -27,25 +27,25 @@ export default class Case {
     getUpLeft() {
         let x = this.x;
         let y = this.y;
-        return (x > 0 && y > 0) ? {x: x - 1, y: y - 1} : null;
+        return (x > 1 && y > 1) ? {x: x - 1, y: y - 1} : null;
     }
 
     getUpRight() {
         let x = this.x;
         let y = this.y;
-        return (x > 0 && y < 9) ? {x: x - 1, y: y + 1} : null;
+        return (x > 1 && y < 8) ? {x: x - 1, y: y + 1} : null;
     }
 
     getDownLeft() {
         let x = this.x;
         let y = this.y;
-        return (x < 9 && y > 0) ? {x: x + 1, y: y - 1} : null;
+        return (x < 8 && y > 1) ? {x: x + 1, y: y - 1} : null;
     }
 
     getDownRight() {
         let x = this.x;
         let y = this.y;
-        return (x < 9 && y < 9) ? {x: x + 1, y: y + 1} : null;
+        return (x < 8 && y < 8) ? {x: x + 1, y: y + 1} : null;
     }
 
     getCoordFromDirection(name) {

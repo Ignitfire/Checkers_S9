@@ -9,6 +9,9 @@ export class ViewLoginForm {
         const form = document.createElement('form');
         form.id = 'loginForm';
 
+        const errorParagraph = document.createElement('p');
+        errorParagraph.id = 'errorMessage';
+
         // Create fieldset
         const fieldset = document.createElement('fieldset');
 
@@ -96,5 +99,9 @@ export class ViewLoginForm {
             username: this.usernameInput.value,
             password: this.passwordInput.value
         };
+    }
+
+    renderError(errorMessage) {
+        document.getElementById('errorMessage').innerText = errorMessage;
     }
 }
