@@ -10,6 +10,7 @@ socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
     let gameView;
     let currentUserData;
+    let currentUser;
     let game;
 
     viewLoginForm.form.addEventListener("submit", (e) => {
@@ -32,7 +33,7 @@ socket.on("connection", () => {
         message = JSON.parse(message);
 
         // Initialisation des utilisateurs (A récupérer plus tard par le webSocket)
-        let currentUser = new User(currentUserData.username);
+        currentUser = new User(currentUserData.username);
         let opponentUser = new User(message.adversaire);
         let joueur1;
         let joueur2;
@@ -59,6 +60,12 @@ socket.on("connection", () => {
 
         game.deplacementEvent.addEventListener('deplacement-move', (e) => {
             socket.emit('deplacement-move', e.detail);
+            if (game.isOver()) {
+                const nomGagnant = game.getNomGagnant();
+                // Envoie de la fin de partie et du gagnant
+                socket.emit("fin-partie", nomGagnant);
+                gameView.renderGameOver(currentUser.name, socket);
+            }
         });
     });
 
@@ -67,5 +74,9 @@ socket.on("connection", () => {
         gameView.movePawn(pawn, moveData);
         game.tourSuivant();
         gameView.refreshJoueurQuiJoue();
-    })
+        // Vérifier que le jeu est terminé
+        if (game.isOver()) {
+            gameView.renderGameOver(currentUser.name, socket);
+        }
+    });
 });

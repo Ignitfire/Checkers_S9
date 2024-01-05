@@ -1,13 +1,13 @@
 export class ViewGame {
     alphabet = {
-        1:'A',
-        2:'B',
-        3:'C',
-        4:'D',
-        5:'E',
-        6:'F',
-        7:'G',
-        8:'H',
+        1: 'A',
+        2: 'B',
+        3: 'C',
+        4: 'D',
+        5: 'E',
+        6: 'F',
+        7: 'G',
+        8: 'H',
     }
     game;
     mainDiv;
@@ -184,7 +184,7 @@ export class ViewGame {
                 caseDestination.classList.add("take");
             }
             caseDestination.addEventListener("click", () => {
-                const eventToSend = new CustomEvent('deplacement-move', {detail : move});
+                const eventToSend = new CustomEvent('deplacement-move', {detail: move});
                 // On mets la logique du jeu à jour
                 const pion = this.game.executeMove(move);
                 // On mets l'écran du jeu à jour
@@ -229,5 +229,71 @@ export class ViewGame {
         }
         // On affiche le pion sur sa case de destination
         this.renderPawn(pion);
+    }
+
+    renderGameOver(nomJoueur, socket) {
+        // Création du contenu de la popin
+        const h1 = document.createElement("h1");
+        h1.innerText = 'La partie est terminée';
+
+        // Création du container de bouton
+        const actionBtn = document.createElement("div");
+        actionBtn.classList.add("button-container");
+
+        // Création du bouton rejouer
+        const rejouerBtn = document.createElement("button");
+        rejouerBtn.id = "rejouerBtn";
+        rejouerBtn.classList.add("modal-button");
+        rejouerBtn.innerText = "Rejouer";
+        rejouerBtn.addEventListener("click", () => {
+            socket.emit("login", {username: nomJoueur}, 1);
+            this.hidePopin();
+        });
+
+        // Création du bouton score
+        const scoreBtn = rejouerBtn.cloneNode(true);
+        scoreBtn.id = "scoreBtn";
+        scoreBtn.innerText = "Score";
+        scoreBtn.addEventListener("click", () => {
+            socket.emit("score");
+            this.hidePopin();
+        });
+
+        // Création du bouton quitter
+        const quitterBtn = rejouerBtn.cloneNode(true);
+        quitterBtn.id = "quitterBtn";
+        quitterBtn.innerText = "Quitter";
+        quitterBtn.addEventListener("click", () => {
+            socket.emit("disconnect");
+            this.hidePopin();
+        });
+
+        // On ajoute tous les boutons au container
+        actionBtn.appendChild(rejouerBtn);
+        actionBtn.appendChild(scoreBtn);
+        actionBtn.appendChild(quitterBtn);
+
+        // On affiche la popin
+        this.renderPopin(h1, actionBtn);
+    }
+
+    renderPopin(content, actionBtn) {
+        const modal = document.getElementById("modal");
+        const modalContent = document.querySelector("#modal .modal-content");
+
+        while (modalContent.firstChild) {
+            modalContent.removeChild(modalContent.lastChild);
+        }
+
+        modalContent.appendChild(content);
+        modalContent.appendChild(actionBtn);
+
+        // Rend visible la popin
+        modal.classList.add('show');
+    }
+
+    hidePopin() {
+        const modal = document.getElementById('modal');
+        modal.classList.remove('show');
     }
 }

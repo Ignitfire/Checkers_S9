@@ -14,7 +14,7 @@ export default class Case {
 
     /**
      * Défini un pion sur la case
-     * @param pawn
+     * @param { Pion } pawn
      */
     setPawn(pawn) {
         this.pion = pawn;
