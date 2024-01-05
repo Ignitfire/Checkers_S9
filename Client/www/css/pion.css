@@ -1,23 +1,14 @@
-.pion {
-    border-radius: 50%;
+.pion, .dame {
     height: 50px;
     width: 100%;
 }
 
-.pion.noir {
-    background-color: black;
+.pion.noir .s0, .dame.noir .s0, .dame.noir .s1 {
+    fill: #282828;
+    stroke: #000000;
 }
 
-.pion.blanc {
-    background-color: white;
-}
-
-.dame {
-    height: 50px;
-    width: 100%;
-    line-height: 50px;
-    text-align: center;
-}
-.noir .dame {
-    color: white;
+.pion.blanc .s0, .dame.blanc .s0, .dame.blanc .s1 {
+    fill: #ffffff;
+    stroke: #000000;
 }

@@ -9,9 +9,17 @@ export class ViewGame {
         7:'G',
         8:'H',
     }
+    game;
+    mainDiv;
+    damier;
+    pionContent;
+    dameContent;
+
     constructor(game) {
         this.initGame(game);
-        this.renderGame();
+        this.initPion()
+            .then(this.renderGame.bind(this));
+        this.initDame();
     }
 
     initGame(game) {
@@ -53,6 +61,31 @@ export class ViewGame {
         damier.appendChild(table);
         table.appendChild(tbody);
         this.damier = damier;
+    }
+
+    initPion() {
+        return this.fetchSVG('../../img/svg/pion.svg')
+            .then((svgText) => {
+                this.pionContent = svgText;
+            });
+    }
+
+    initDame() {
+        return this.fetchSVG('../../img/svg/dame.svg')
+            .then((svgText) => {
+                this.dameContent = svgText;
+            });
+    }
+
+    fetchSVG(svgFileUrl) {
+        return fetch(svgFileUrl)
+            .then(response => response.text())
+            .then(svgText => {
+                return svgText; // Return the SVG content if needed
+            })
+            .catch(error => {
+                console.error('Error fetching the SVG file:', error);
+            });
     }
 
     renderGame() {
@@ -117,16 +150,17 @@ export class ViewGame {
     }
 
     renderPawn(pawn) {
-        const pion = document.createElement("div");
+        const pionContent = pawn.level === 1 ? this.dameContent : this.pionContent;
+        const parser = new DOMParser();
+        const svgDocument = parser.parseFromString(pionContent, 'image/svg+xml');
+        const pion = svgDocument.documentElement;
         pion.id = "pion" + pawn.c.x + pawn.c.y;
-        pion.classList.add("pion");
         pion.classList.add(pawn.color);
 
         if (pawn.level === 1) {
-            const dame = document.createElement("div");
-            dame.classList.add("dame");
-            dame.textContent = "D";
-            pion.appendChild(dame);
+            pion.classList.add("dame");
+        } else {
+            pion.classList.add("pion");
         }
 
         pion.addEventListener('click', (e) => {
