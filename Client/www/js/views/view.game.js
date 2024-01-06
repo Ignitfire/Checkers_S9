@@ -89,9 +89,25 @@ export class ViewGame {
     }
 
     renderGame() {
+        this.clearGame();
         this.renderInterface();
         this.renderDamier();
         this.renderPawns();
+    }
+
+    clearGame() {
+        const bandeauHaut = document.getElementById("bandeauhaut");
+        const informationDiv = document.getElementById("information");
+        const damier = document.getElementById("damier");
+
+        if (bandeauHaut)
+            bandeauHaut.remove();
+
+        if (informationDiv)
+            informationDiv.remove();
+
+        if (damier)
+            damier.remove();
     }
 
     renderInterface() {

@@ -1,6 +1,7 @@
 export class ViewLoginForm {
     constructor() {
         this.initForm();
+        this.initWaitingScreen();
         this.renderForm();
     }
 
@@ -73,9 +74,15 @@ export class ViewLoginForm {
     }
 
     renderWaitingScreen() {
-        this.initWaitingScreen();
-
         const mainDiv = document.getElementById('main');
+
+        // Si le damier est présent, on clear l'entièreté de la mainDiv (cas où le joueur en fin de partie veut rejouer)
+        if (document.getElementById('damier')) {
+            while(mainDiv.firstChild) {
+                mainDiv.removeChild(mainDiv.lastChild);
+            }
+        }
+
         mainDiv.classList.add('waitingScreen');
         mainDiv.appendChild(this.waitingScreen);
 
@@ -85,11 +92,17 @@ export class ViewLoginForm {
     }
 
     clearRender() {
-        const mainDiv = document.getElementById('main');
-        mainDiv.removeChild(this.form);
-        mainDiv.classList.remove('loginForm');
-        if (!!this.waitingScreen) {
-            mainDiv.removeChild(this.waitingScreen);
+        const mainDiv = document.getElementById("main");
+        const loginForm = document.getElementById("loginForm");
+        const waitingScreen = document.getElementById("spinnerContainer");
+
+        if (loginForm) {
+            mainDiv.removeChild(loginForm);
+            mainDiv.classList.remove('loginForm');
+        }
+
+        if (waitingScreen) {
+            mainDiv.removeChild(waitingScreen);
             mainDiv.classList.remove('waitingScreen');
         }
     }

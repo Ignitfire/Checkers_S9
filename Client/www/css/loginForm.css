@@ -1,4 +1,4 @@
-#main.loginForm {
+#main.loginForm, #main.waitingScreen {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,7 +39,7 @@
 
 /** WAITING SCREEN : */
 
-.loginForm.waitingScreen form {
+.waitingScreen form {
     filter: blur(1.5px);
 }
 
