@@ -9,9 +9,9 @@ let error;
 //TODO: fonction d'historique des parties 
 
 function getNbVictoire(name) {
-    user_service.getUserNbVictory(pseudo)
+    user_service.getUserVictoires(name)
     .then(data => {
-      console.log( pseudo + " a gagné " + data[0].nbVictoire + " fois.");
+      console.log(name + " a gagné " + data.nbVictoires + " fois.");
     })
 }
 
@@ -56,7 +56,7 @@ async function getPlayerGameHistory(username) {
  * @param name nom du joueur
  */
 
-function JoueurCo (socket, name) {
+function JoueurCo(socket, name) {
     listeAttente.push({socket: socket, name: name});
 }
 
