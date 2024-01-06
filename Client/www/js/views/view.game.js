@@ -202,6 +202,14 @@ export class ViewGame {
     refreshJoueurQuiJoue() {
         const informationDiv = document.querySelector('#information .joueurCourant');
         informationDiv.innerText = this.game.joueurQuiJoue.user.name;
+
+        this.refreshInfoJoueur(this.game.Joueur1);
+        this.refreshInfoJoueur(this.game.Joueur2);
+    }
+
+    refreshInfoJoueur(joueur) {
+        const nbPionJoueur = document.querySelector("#" + joueur.user.name + " .joueur-nombre-pion");
+        nbPionJoueur.innerText = joueur.getPionsRestants();
     }
 
     cleanPossibleMoves() {

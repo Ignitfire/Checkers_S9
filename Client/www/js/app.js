@@ -1,7 +1,7 @@
 import Jeu from './models/Jeu.js';
 import User from './models/User.js';
 
-const socket = io("http://192.168.1.10:3000");
+const socket = io("http://192.168.16.1:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
 import {ViewGame} from "./views/view.game.js";
 import Joueur from "./models/Joueur.js";
