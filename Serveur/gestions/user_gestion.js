@@ -6,7 +6,6 @@ let listeAttente = [];
 let error;
 
 //<--- Fonctions --->//
-//TODO: fonction d'historique des parties 
 
 function getNbVictoire(name) {
     user_service.getUserVictoires(name)

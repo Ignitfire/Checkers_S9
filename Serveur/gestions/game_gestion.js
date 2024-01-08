@@ -1,9 +1,5 @@
 //<===== Fonctions gestions informations lié à une partie==>
 
-/* TO ADD: une fonction pour inverser les déplacements 
-et afficher du bonc coté entre les joueurs ?
- */
-
 
 // --------Importation Bdd---------
 var gameService = require("../game_service");

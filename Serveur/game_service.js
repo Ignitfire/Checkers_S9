@@ -2,9 +2,7 @@
 var game_model = require("./models/game_model");
 var Partie = game_model.Partie;
 
-// TODO : ajout des variables du modèle joueur ? => gestions des couleurs à bouger du coup
 
-//TODO: fonction update du gagnant de la partie, on retourne le nom du gagnant en string pour la bdd
 async function updateGagnant(name) {
     await Partie.findOneAndUpdate({ 
         $and: [
@@ -14,7 +12,7 @@ async function updateGagnant(name) {
     }, { gagnant: name }) 
 }
 
-//TODO: fonction création et save d'une partie, renvoie les infos sur la partie
+
 async function create (data) {
     let nouvellePartie = new Partie({
         joueur1: data.joueur1,

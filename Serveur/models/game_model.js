@@ -1,4 +1,3 @@
-// TODO
 var bbd_connexion = require('../connexion_bdd');
 
 var mongoose = require('mongoose');

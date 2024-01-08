@@ -15,7 +15,6 @@ var room = require("./room");
 var game_gestion = require ("./gestions/game_gestion");
 var adresse_gestion = require ("./gestions/adresse_gestion");
 
-//TODO: fonction d'historique des parties 
 
 const portServeur = 3000; // à vérifier si sela ne pose pas de conflit avec d'autres services sinon changer le port
 var WaitListe = [];
@@ -92,10 +91,6 @@ io.on("connection", function(socket) {
                 }
             }
     });
-
-//TODO : use move deplecement emit, inversement déplacement fait coté client, serveur reçoit et renvoie à l'autre joueur
-//remplacement envoi déplacement par move déplacement 
-// déplacement => move
 
     // se contente de renvoyer le mouvement à l'autre joueur, l'inversement est fait coté client
     socket.on("deplacement-move", function (move) {

@@ -7,8 +7,6 @@ const User = UserModel.User
 
 // <---- Fonctions ---->
 
-//TODO: fonction d'historique des parties 
-
 /**
     * Fonction qui permet de authentifier un utilisateur
     * @param data les données de l'utilisateur
