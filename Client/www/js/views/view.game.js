@@ -255,10 +255,22 @@ export class ViewGame {
         this.renderPawn(pion);
     }
 
-    renderGameOver(nomJoueur, socket) {
+    renderGameOver(nomJoueur, socket, message) {
         // Création du contenu de la popin
+        const contentContainer = document.createElement("div");
+
+        // Titre
         const h1 = document.createElement("h1");
         h1.innerText = 'La partie est terminée';
+        contentContainer.appendChild(h1);
+
+        // Si un message provient de l'app
+        if (message) {
+            const messageContainer = document.createElement("p");
+            messageContainer.classList.add("message-container");
+            messageContainer.innerText = message;
+            contentContainer.appendChild(messageContainer);
+        }
 
         // Création du container de bouton
         const actionBtn = document.createElement("div");
@@ -298,7 +310,7 @@ export class ViewGame {
         actionBtn.appendChild(quitterBtn);
 
         // On affiche la popin
-        this.renderPopin(h1, actionBtn);
+        this.renderPopin(contentContainer, actionBtn);
     }
 
     renderPopin(content, actionBtn) {

@@ -119,19 +119,20 @@ io.on("connection", function(socket) {
     });
 
     socket.on("disconnect", function () {
+        console.log('un joueur s\'est déconnecté en pleine partie');
         user_gestion.JoueurDeco(socket);
         //on récupère la partie dans laquelle se trouve le joueur qui s'est déconnecté
         const game = game_gestion.findGame(socket.id);
         //Si la partie existe
-            if (game !== undefined || typeof game !== 'undefined') {
-                //on regarde si le joueur qui s'est déconnecté est le joueur 1
-                if (socket.id === game.idJ1) {
-                    //on envoie un message au joueur 2 pour lui dire que son adversaire s'est déconnecté
-                    io.to(`${game.idJ2}`).emit("deconnexion", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J2);
-                }
-                //sinon on envoie un message au joueur 1 pour lui dire que son adversaire s'est déconnecté
-                socket.to(`${game.idJ1}`).emit("deconnexion", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J1);
+        if (game !== undefined || typeof game !== 'undefined') {
+            //on regarde si le joueur qui s'est déconnecté est le joueur 1
+            if (socket.id === game.idJ1) {
+                //on envoie un message au joueur 2 pour lui dire que son adversaire s'est déconnecté
+                io.to(`${game.idJ2}`).emit("deconnexion-adversaire", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J2);
             }
+            //sinon on envoie un message au joueur 1 pour lui dire que son adversaire s'est déconnecté
+            socket.to(`${game.idJ1}`).emit("deconnexion-adversaire", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J1);
+        }
     });
 
 });

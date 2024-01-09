@@ -29,9 +29,8 @@ async function updateGagnant(name) {
 //Fonction d'ajout de partie à ListGame
 function addList(socketId1, Joueur1, socketId2, Joueur2) {
     const game = { idJ1: socketId1, J1: Joueur1, idJ2: socketId2, J2: Joueur2 };
-    const obj = Object.create(game);
-    ListGame.push(obj); //ajout de la partie à la liste
-  }
+    ListGame.push(game); //ajout de la partie à la liste
+}
 
 /**
  * Fonction qui retrouve la partie dans laquelle se trouve le joueur qui s'est déconnecté
