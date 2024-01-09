@@ -1,3 +1,5 @@
+import {ViewModal} from "./view.modal.js";
+
 export class ViewGame {
     alphabet = {
         1: 'A',
@@ -256,7 +258,7 @@ export class ViewGame {
     }
 
     renderGameOver(nomJoueur, socket, message) {
-        // Création du contenu de la popin
+        // Création du contenu de la modal
         const contentContainer = document.createElement("div");
 
         // Titre
@@ -283,7 +285,7 @@ export class ViewGame {
         rejouerBtn.innerText = "Rejouer";
         rejouerBtn.addEventListener("click", () => {
             socket.emit("login", {username: nomJoueur}, 1);
-            this.hidePopin();
+            ViewModal.hideModal();
         });
 
         // Création du bouton score
@@ -292,7 +294,7 @@ export class ViewGame {
         scoreBtn.innerText = "Score";
         scoreBtn.addEventListener("click", () => {
             socket.emit("score");
-            this.hidePopin();
+            ViewModal.hideModal();
         });
 
         // Création du bouton quitter
@@ -300,8 +302,8 @@ export class ViewGame {
         quitterBtn.id = "quitterBtn";
         quitterBtn.innerText = "Quitter";
         quitterBtn.addEventListener("click", () => {
-            socket.emit("disconnect");
-            this.hidePopin();
+            socket.emit("quitter");
+            ViewModal.hideModal();
         });
 
         // On ajoute tous les boutons au container
@@ -309,27 +311,7 @@ export class ViewGame {
         actionBtn.appendChild(scoreBtn);
         actionBtn.appendChild(quitterBtn);
 
-        // On affiche la popin
-        this.renderPopin(contentContainer, actionBtn);
-    }
-
-    renderPopin(content, actionBtn) {
-        const modal = document.getElementById("modal");
-        const modalContent = document.querySelector("#modal .modal-content");
-
-        while (modalContent.firstChild) {
-            modalContent.removeChild(modalContent.lastChild);
-        }
-
-        modalContent.appendChild(content);
-        modalContent.appendChild(actionBtn);
-
-        // Rend visible la popin
-        modal.classList.add('show');
-    }
-
-    hidePopin() {
-        const modal = document.getElementById('modal');
-        modal.classList.remove('show');
+        // On affiche la modal
+        ViewModal.renderModal(contentContainer, actionBtn);
     }
 }
