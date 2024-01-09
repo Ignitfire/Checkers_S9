@@ -4,6 +4,7 @@ const socket = io("http://192.168.1.10:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
 import {ViewGame} from "./views/view.game.js";
 import Joueur from "./models/Joueur.js";
+import {ViewScore} from "./views/view.score.js";
 
 socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
@@ -84,8 +85,16 @@ socket.on("connection", () => {
         }
     });
 
+    // On reçoit l'information du serveur que le joueur adverse s'est déconnecté
     socket.on("deconnexion-adversaire", (message, joueur) => {
+        // On envoie au serveur que c'est une fin de partie
         socket.emit("fin-partie", joueur);
+        // On informe le joueur qu'il a gagné la partie à cause de la deconnexion de son adversaire
         gameView.renderGameOver(currentUser.name, socket, message);
+    });
+
+    // On reçoit l'information du serveur d'afficher le tableau des scores
+    socket.on("score", (data) => {
+        const viewScore = new ViewScore(data);
     });
 });

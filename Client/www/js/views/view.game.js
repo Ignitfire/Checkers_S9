@@ -294,7 +294,6 @@ export class ViewGame {
         scoreBtn.innerText = "Score";
         scoreBtn.addEventListener("click", () => {
             socket.emit("score");
-            ViewModal.hideModal();
         });
 
         // Création du bouton quitter

@@ -134,5 +134,4 @@ io.on("connection", function(socket) {
             socket.to(`${game.idJ1}`).emit("deconnexion-adversaire", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J1);
         }
     });
-
 });
