@@ -67,22 +67,6 @@ socket.on("connection", () => {
             }
         });
 
-        // On ajoute un event listener lors de la fermeture de la page web qui demande la confirmation de l'utilisateur
-        window.addEventListener('beforeunload', (e) => {
-            // Cancel the event
-            e.preventDefault();
-
-            // Chrome requires the returnValue property to be set
-            e.returnValue = '';
-
-            // Perform actions here
-            // For example, show a confirmation dialog
-            const confirmationMessage = 'test';
-            e.returnValue = confirmationMessage; // Some browsers may require this line
-
-            return confirmationMessage;
-        });
-
         window.addEventListener('unload', (e) => {
             // On envoit au serveur que l'utilisateur s'est déconnecté
             socket.emit("disconnect");
