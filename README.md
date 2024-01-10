@@ -19,8 +19,8 @@ Après avoir installer l'environnement de développement Cordova, suivez les ét
 
 1. Se déplacer au sein du projet dans le répertoire `Client`
 2. Ajouter les plateformes `browser` et `android`
-   - `cordova plateform add browser`
-   - `cordova plateform add android`
+   - `cordova platform add browser`
+   - `cordova platform add android`
 3. Compiler le projet Client
    - `cordova build browser`
    - `cordova build android`
@@ -36,11 +36,9 @@ Toutes les dépendances décrites dans les fichiers `Serveur/package.json` et `S
 
 ## Lancer le serveur du jeu
 
-Pour pouvoir jouer à plusieurs en réseau, il est indispensable d'avoir un serveur de jeu qui permet de mettre en relation
-les personnes qui veulent jouer.
+Pour pouvoir jouer à plusieurs en réseau, il est indispensable d'avoir un serveur de jeu qui permet de mettre en relation les personnes qui veulent jouer.
 
-Il est en fait question de démarrer deux serveur : un serveur de base de données pour gérer la persistence des données 
-(utilisateur, historique de partie, etc...) et un serveur NodeJS pour la connexion au jeu et la jouabilité à plusieurs.
+Il est en fait question de démarrer deux serveur : un serveur de base de données pour gérer la persistence des données (utilisateur, historique de partie, etc...) et un serveur NodeJS pour la connexion au jeu et la jouabilité à plusieurs.
 
 ### Serveur de base de données (`mongoose`)
 
