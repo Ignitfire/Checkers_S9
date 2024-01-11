@@ -1,10 +1,21 @@
 import Jeu from './models/Jeu.js';
 import User from './models/User.js';
-const socket = io("http://192.168.1.10:3000");
+const socket = io("http://130.190.22.228:3000");
 import {ViewLoginForm} from "./views/view.loginForm.js";
 import {ViewGame} from "./views/view.game.js";
 import Joueur from "./models/Joueur.js";
 import {ViewScore} from "./views/view.score.js";
+
+socket.on("server-log", (logMessage) => {
+    console.log("Server Log: ", logMessage);
+});
+
+socket.on("server-error", (errorMessage) => {
+    console.error("Server Error: ", errorMessage);
+    //Recuperation de l'erreur
+});
+
+console.log("Client lancé");
 
 socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
