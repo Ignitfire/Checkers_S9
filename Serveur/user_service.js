@@ -24,7 +24,7 @@ async function authenticate(data) {
 
     //on compare les mots de passe
     if(bcrypt.compareSync(data.password, user.password)) {
-        console.log("Identification: Utilisateur est authentifié");
+        console.log("Identification: Utilisateur" + data.username + "est authentifié");
         //on retourne l'utilisateur authentifié et qu'il n'y a pas d'erreur
         return {error: null, user: user}; 
     } else {
@@ -37,7 +37,7 @@ async function authenticate(data) {
 async function create(data) {
     const existingUser = await User.findOne({ username: data.username }); // on cherche l'utilisateur dans la bdd
     if (existingUser) {
-        console.log("Utilisateur déjà existant");
+        console.log("Utilisateur" + data.username + "déjà existant" );
         return { error: "Utilisateur déjà existant ", user: {} };
     }
 
@@ -57,7 +57,7 @@ async function create(data) {
     //on sauvegarde l'utilisateur dans la bdd
     await user.save()
         .then(() => {
-            console.log("Utilisateur ajouté à la bdd avec succès ");
+            console.log("Utilisateu ajouté à la bdd avec succès ");
         })
         .catch(err => {
             console.log(err); //on affiche l'erreur
