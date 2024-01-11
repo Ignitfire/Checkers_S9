@@ -1,16 +1,23 @@
 import { ViewPopUp } from "./view.Popup.js";
+import {Modal} from "./modal.js";
 
 export class ViewScore {
+    modal;
     constructor(scores) {
         this.renderScore(scores);
     }
 
     renderScore(scores) {
         const table = this.createScoreTable(scores);
-        // TODO : ajouter les boutons d'action
+        this.modal.createButton();
+        // const buttonsContainer = this.createButtonsContainer();
 
         // Affichage de la popup
         ViewPopUp.renderPopUp(table, document.createElement("div"));
+
+        // Affichage de la modal
+        this.modal = new Modal('modal-score', table);
+        this.modal.renderModal();
     }
 
     //TODO trier tableau par nbVictoires
@@ -60,5 +67,27 @@ export class ViewScore {
         table.appendChild(tableHeader);
         table.appendChild(tableBody);
         return table;
+    }
+
+    createButtonsContainer() {
+        const buttonsContainer = document.createElement("div");
+
+        // Création du bouton rejouer
+        const rejouerBtn = document.createElement("button");
+        rejouerBtn.id = "rejouerBtn";
+        rejouerBtn.classList.add("modal-button");
+        rejouerBtn.innerText = "Rejouer";
+        this.buttons.add(rejouerBtn);
+
+        // Création du bouton quitter
+        const quitterBtn = rejouerBtn.cloneNode(true);
+        quitterBtn.id = "quitterBtn";
+        quitterBtn.innerText = "Quitter";
+        this.buttons.add(quitterBtn);
+
+        buttonsContainer.appendChild(rejouerBtn);
+        buttonsContainer.appendChild(quitterBtn);
+
+        return buttonsContainer;
     }
 }

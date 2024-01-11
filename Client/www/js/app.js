@@ -142,7 +142,7 @@ socket.on("connection", () => {
     });
     // On reçoit l'information du serveur d'afficher le tableau des scores
     socket.on("score", (data) => {
-        const viewScore = new ViewScore(data);
+        const viewScore = new ViewScore(data, socket);
     });
     // on recoit l'information du serveur d'affiché l'historiques des parties du joueur
     socket.on("historique", (data) => {

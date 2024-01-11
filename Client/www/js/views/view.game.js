@@ -1,4 +1,4 @@
-import {ViewModal} from "./view.modal.js";
+import {Modal} from "./modal.js";
 
 export class ViewGame {
     alphabet = {
@@ -17,6 +17,7 @@ export class ViewGame {
     pionContent;
     dameContent;
     gameInfos;
+    modal;
 
     constructor(game) {
         this.initGame(game);
@@ -260,25 +261,18 @@ export class ViewGame {
     }
 
     renderGameOver(nomJoueur, socket, message) {
-        // Création du contenu de la modal
-        const contentContainer = document.createElement("div");
+        const contentContainer = this.createMessageContainer(message);
+        //const buttonsContainer = this.createButtonsContainer(socket, nomJoueur);
 
-        // Titre
-        const h1 = document.createElement("h1");
-        h1.innerText = 'La partie est terminée';
-        contentContainer.appendChild(h1);
+        // On affiche la modal
+        this.modal = new Modal('modal-gameover', contentContainer);
+        this.modal.renderModal();
+    }
 
-        // Si un message provient de l'app
-        if (message) {
-            const messageContainer = document.createElement("p");
-            messageContainer.classList.add("message-container");
-            messageContainer.innerText = message;
-            contentContainer.appendChild(messageContainer);
-        }
-
+    createButtonsContainer(socket, nomJoueur) {
         // Création du container de bouton
-        const actionBtn = document.createElement("div");
-        actionBtn.classList.add("button-container");
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("button-container");
 
         // Création du bouton rejouer
         const rejouerBtn = document.createElement("button");
@@ -287,7 +281,7 @@ export class ViewGame {
         rejouerBtn.innerText = "Rejouer";
         rejouerBtn.addEventListener("click", () => {
             socket.emit("login", {username: nomJoueur}, 1);
-            ViewModal.hideModal();
+            Modal.hideModal();
         });
 
         // Création du bouton score
@@ -304,15 +298,32 @@ export class ViewGame {
         quitterBtn.innerText = "Quitter";
         quitterBtn.addEventListener("click", () => {
             socket.emit("quitter");
-            ViewModal.hideModal();
+            Modal.hideModal();
         });
 
         // On ajoute tous les boutons au container
-        actionBtn.appendChild(rejouerBtn);
-        actionBtn.appendChild(scoreBtn);
-        actionBtn.appendChild(quitterBtn);
+        buttonsContainer.appendChild(rejouerBtn);
+        buttonsContainer.appendChild(scoreBtn);
+        buttonsContainer.appendChild(quitterBtn);
+        return buttonsContainer;
+    }
 
-        // On affiche la modal
-        ViewModal.renderModal(contentContainer, actionBtn);
+    createMessageContainer(message) {
+        // Création du contenu de la modal
+        const contentContainer = document.createElement("div");
+
+        // Titre
+        const h1 = document.createElement("h1");
+        h1.innerText = 'La partie est terminée';
+        contentContainer.appendChild(h1);
+
+        // Si un message provient de l'app
+        if (message) {
+            const messageContainer = document.createElement("p");
+            messageContainer.classList.add("message-container");
+            messageContainer.innerText = message;
+            contentContainer.appendChild(messageContainer);
+        }
+        return contentContainer;
     }
 }
