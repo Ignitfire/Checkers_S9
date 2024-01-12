@@ -18,14 +18,14 @@ export class ViewHistorique {
         const arr = [
             {
                 header: "Joueur1",
-                data: "username"
+                data: "joueur1"
             },{
                 header: "Joueur2",
-                data: "username"
+                data: "joueur2"
             },
              {
                 header: "gagnant",
-                data: "username"
+                data: "gagnant"
             }, {
                 header: "Date de la partie",
                 data: "datePartie"

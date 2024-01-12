@@ -188,6 +188,7 @@ export class ViewGame {
                 // On efface tous les mouvements déjà présents
                 this.cleanPossibleMoves();
                 // On affiche les mouvements possibles pour le pion sélectionné
+                //TODO Move Correction, récupération des moves du pion concerné dans joueur.possibleMoves
                 this.renderPossibleMoves(pawn.getPossibleMoves());
             }
         });
