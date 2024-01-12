@@ -14,23 +14,33 @@ const User = UserModel.User
     */
 async function authenticate(data) {
     const user = await User.findOne({ username: data.username }); // on cherche l'utilisateur dans la bdd
-    if(!user) {
-        console.log("Utilisateur non trouvé");
+    
+    //on vérifie si l'utilisateur existe
+    if(!user) { //si l'utilisateur n'existe pas
+        console.log("Utilisateur non trouvé ");
         return await create(data); 
+        //return {error: "Utilisateur non trouvé", user: {}}; //on retourne une erreur et un utilisateur vide
+    } 
+
+    //on compare les mots de passe
+    if(bcrypt.compareSync(data.password, user.password)) {
+        console.log("Identification: Utilisateur" + data.username + "est authentifié");
+        //on retourne l'utilisateur authentifié et qu'il n'y a pas d'erreur
+        return {error: null, user: user}; 
     } else {
-        //on compare les mots de passe
-        if(bcrypt.compareSync(data.password, user.password)) {
-            console.log("Identification: Utilisateur est authentifié");
-            //on retourne l'utilisateur authentifié et qu'il n'y a pas d'erreur
-            return {error: "null", user: user}; 
-        } else {
-            console.log("Identification: Mot de passe incorrect");
-            return {error: "Mot de passe incorrect", user: {}}; //on retourne une erreur et un utilisateur vide
-        }
+        console.log("Identification: Mot de passe incorrect");
+        return {error: "Mot de passe incorrect ", user: {}}; //on retourne une erreur et un utilisateur vide
     }
+    
 }
 
 async function create(data) {
+    const existingUser = await User.findOne({ username: data.username }); // on cherche l'utilisateur dans la bdd
+    if (existingUser) {
+        console.log("Utilisateur" + data.username + "déjà existant" );
+        return { error: "Utilisateur déjà existant ", user: {} };
+    }
+
     //on hash le mot de passe
     const hashMdp = await bcrypt.hash(data.password, 10); //10 => nombre de tours de hashage
 
@@ -47,12 +57,12 @@ async function create(data) {
     //on sauvegarde l'utilisateur dans la bdd
     await user.save()
         .then(() => {
-            console.log("Utilisateur ajouté à la bdd avec succès");
+            console.log("Utilisateu ajouté à la bdd avec succès ");
         })
         .catch(err => {
             console.log(err); //on affiche l'erreur
         });
-    return {error: "null", user: user}; //on retourne l'utilisateur et qu'il n'y a pas d'erreur
+    return {error: null, user: user}; //on retourne l'utilisateur et qu'il n'y a pas d'erreur
 
 }
 

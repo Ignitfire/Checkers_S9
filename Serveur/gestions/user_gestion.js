@@ -21,7 +21,7 @@ function getNbVictoire(name) {
 
 function addVictoire (name) {
    user_service.updateVictoire(name).then(data => {
-        console.log("Mise à jour du nombre de victoires du joueur");
+        console.log("Mise à jour du nombre de victoires du joueur" + name);
    })
 }
 
@@ -32,7 +32,7 @@ function addVictoire (name) {
 
 function addPartie (name) {
     user_service.updatePartie(name).then(data => {
-        console.log("Mis à jour du nombre de parties jouées par le joueur");
+        console.log("Mis à jour du nombre de parties jouées par le joueur" + name);
     })
 }
 
@@ -81,20 +81,28 @@ function JoueurDeco (socket) {
  */
 
 async function addJoueur (data, socket, etat) {
+    
     if (etat == 0) {
         const userPromise = await user_service.authenticate(data);
         if (userPromise.error == null) {
-            //Si une erreur est retourner, on attribue le message à notre variable error
-            error = userPromise.error;
-        } else {
             //On ajoute le joueur à la liste d'attente
+            
             JoueurCo(socket, userPromise.user.username); 
             error = null;
+        } else {
+            //Si une erreur est retourner, on attribue le message à notre variable error
+            error = userPromise.error;
         }
     } else if (etat == 1) {
-        //On ajoute le joueur à la liste d'attente
-        JoueurCo(socket, data.username);
-        error = null;
+        //on vérifie qu'il n'est pas déjà dans la liste d'attente
+        const existUser = listeAttente.find(el => el.name === data.username);
+        if (!existUser) {
+            //On ajoute le joueur à la liste d'attente
+            JoueurCo(socket, data.username);
+            error = null;
+        } else {
+            error = "Vous êtes déjà dans la liste d'attente";
+        }
     }
     //On retourne la liste d'attente et l'erreur
     return { error: error, listeAttente: listeAttente };

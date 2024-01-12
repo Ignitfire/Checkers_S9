@@ -8,6 +8,17 @@ import { ViewScore } from "./views/view.score.js";
 import { ViewNavigation } from './views/view.navigation.js';
 import { ViewHistorique } from './views/view.historique.js';
 
+socket.on("server-log", (logMessage) => {
+    console.log("Server Log: ", logMessage);
+});
+
+socket.on("server-error", (errorMessage) => {
+    console.error("Server Error: ", errorMessage);
+    //Recuperation de l'erreur
+});
+
+console.log("Client lancé");
+
 socket.on("connection", () => {
     const viewLoginForm = new ViewLoginForm();
     let gameView;
