@@ -20,15 +20,7 @@ async function create (data) {
         joueur1: data.joueur1,
         joueur2: data.joueur2,
         gagnant: "",
-<<<<<<< HEAD
         datePartie: currentDate.toLocaleDateString('fr-FR', optionDate) 
-=======
-        datePartie: new Date().toLocaleDateString('fr-FR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        })
->>>>>>> df8ca9bb8d06d27df35445835c3e77aba4c96e0d
     });
 
     // Sauvegarde de cette instance dans mongoDb
