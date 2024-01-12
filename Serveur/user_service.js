@@ -77,8 +77,9 @@ async function getUserVictoires(username) {
  */
 async function getPlayerGameHistory(username) {
     return await Partie.find({ $or: [{ joueur1: username }, { joueur2: username }] },
-        ['joueur1', 'joueur2', 'gagnant', 'datePartie']), sort({ datePartie: -1 });
+        ['joueur1', 'joueur2', 'gagnant', 'datePartie']).sort({ datePartie: -1 });
 }
+
 
 async function updateVictoire(username) {
     //upsert permet de créer un document si l'utilisateur n'as pas encore de victoires

@@ -1,27 +1,39 @@
 #main.game {
     margin: 0 auto;
-    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#bandeauhaut {
+#gameInfos {
     display: flex;
     padding: 1rem;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 90vh;
+    margin-top: 4vh;
+    width: 15vw;
 }
 
-#bandeauhaut .joueur {
+#gameInfos .joueur {
     display: flex;
     justify-content: space-evenly;
-    width: 50%;
     padding: 1rem;
+    font-size: 2em;
 }
 
 #information {
     text-align: center;
     padding: 1rem;
+    font-size: 2em;
 }
 
 #information span.joueurCourant {
     font-weight: bold;
+}
+
+#damier {
+    margin-top: 4vh;
 }
 
 #damier table {
@@ -34,14 +46,16 @@
 }
 
 td.case {
-    height: 50px;
-    width: 10%;
+    height: 10vh;
+    width: 10vh;
 }
 
 td.case.border {
     background-color: #492d22;
     color: #ffd89b;
     text-align: center;
+    height: 5vh;
+    width: 5vh;
 }
 
 td.case.brown {
@@ -52,15 +66,17 @@ td.case.beige {
     background-color: #ffd89b;
 }
 
-td.case.brown.possibleMove, td.case.white.possibleMove {
+td.case.brown.possibleMove,
+td.case.white.possibleMove {
     background-color: green;
 }
 
-td.case.brown.possibleMove.take, td.case.white.possibleMove.take {
+td.case.brown.possibleMove.take,
+td.case.white.possibleMove.take {
     background: orange;
 }
 
-@media (max-width:600px)  {
+@media (max-width:600px) {
     #damier {
         position: fixed;
         bottom: 0;

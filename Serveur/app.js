@@ -104,6 +104,8 @@ io.on("connection", function(socket) {
         user_gestion.addVictoire(name);
         await game_gestion.updateGagnant(name);
         user_gestion.getNbVictoire(name);
+        const currentRoom = Object.keys(socket.rooms).filter(item => item !== socket.id); //on ne veut pas que le socket se connecte à lui-même
+        socket.to(currentRoom).emit("fin-partie");
     });
 
     socket.on("score", function () {
@@ -132,6 +134,22 @@ io.on("connection", function(socket) {
             }
             //sinon on envoie un message au joueur 1 pour lui dire que son adversaire s'est déconnecté
             socket.to(`${game.idJ1}`).emit("deconnexion-adversaire", "Votre adversaire s'est déconnecté, vous avez gagné la partie !", game.J1);
+        }
+    });
+
+    socket.on("forfait", function () {
+        console.log('un joueur a abandonné');
+        //on récupère la partie dans laquelle se trouve le joueur qui s'est déconnecté
+        const game = game_gestion.findGame(socket.id);
+        //Si la partie existe
+        if (game !== undefined || typeof game !== 'undefined') {
+            //on regarde si le joueur qui s'est déconnecté est le joueur 1
+            if (socket.id === game.idJ1) {
+                //on envoie un message au joueur 2 pour lui dire que son adversaire s'est déconnecté
+                io.to(`${game.idJ2}`).emit("abandon-adversaire", "Votre adversaire a abandonné, vous avez gagné la partie !", game.J2);
+            }
+            //sinon on envoie un message au joueur 1 pour lui dire que son adversaire s'est déconnecté
+            socket.to(`${game.idJ1}`).emit("abandon-adversaire", "Votre adversaire a abandonné, vous avez gagné la partie !", game.J1);
         }
     });
 });

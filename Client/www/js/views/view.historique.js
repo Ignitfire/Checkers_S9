@@ -1,12 +1,12 @@
 import { ViewPopUp } from "./view.Popup.js";
 
-export class ViewScore {
-    constructor(scores) {
-        this.renderScore(scores);
+export class ViewHistorique {
+    constructor(history) {
+        this.renderHistory(history);
     }
 
-    renderScore(scores) {
-        const table = this.createScoreTable(scores);
+    renderHistory(history) {
+        const table = this.createScoreTable(history);
         // TODO : ajouter les boutons d'action
 
         // Affichage de la popup
@@ -14,23 +14,27 @@ export class ViewScore {
     }
 
     //TODO trier tableau par nbVictoires
-    createScoreTable(scores) {
+    createScoreTable(history) {
         const arr = [
             {
-                header: "Joueur",
+                header: "Joueur1",
+                data: "username"
+            },{
+                header: "Joueur2",
+                data: "username"
+            },
+             {
+                header: "gagnant",
                 data: "username"
             }, {
-                header: "Parties jouées",
-                data: "nbParties"
-            }, {
-                header: "Parties gagnées",
-                data: "nbVictoires"
+                header: "Date de la partie",
+                data: "datePartie"
             }
         ];
 
-        // Création d'un tableau des scores
+        // Création d'un tableau des history
         const table = document.createElement("table");
-        table.classList.add("score-table");
+        table.classList.add("history-table");
 
         const tableHeader = document.createElement("thead");
         const firstRow = document.createElement("tr");
@@ -45,11 +49,11 @@ export class ViewScore {
 
         // Boucle pour créer le contenu du tableau
         const tableBody = document.createElement("tbody");
-        for (let i = 0; i < scores.length; i++) {
+        for (let i = 0; i < history.length; i++) {
             const row = document.createElement("tr");
             for (let j = 0; j < arr.length; j++) {
                 const cell = document.createElement("td");
-                cell.innerText = scores[i][arr[j].data];
+                cell.innerText = history[i][arr[j].data];
                 row.appendChild(cell);
             }
 

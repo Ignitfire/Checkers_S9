@@ -16,6 +16,7 @@ export class ViewGame {
     damier;
     pionContent;
     dameContent;
+    gameInfos;
 
     constructor(game) {
         this.initGame(game);
@@ -98,12 +99,12 @@ export class ViewGame {
     }
 
     clearGame() {
-        const bandeauHaut = document.getElementById("bandeauhaut");
+        let gameInfos = document.getElementById("gameInfos");
         const informationDiv = document.getElementById("information");
         const damier = document.getElementById("damier");
 
-        if (bandeauHaut)
-            bandeauHaut.remove();
+        if (gameInfos)
+            gameInfos.remove();
 
         if (informationDiv)
             informationDiv.remove();
@@ -115,18 +116,19 @@ export class ViewGame {
     renderInterface() {
         this.mainDiv.classList.add('game');
 
-        const bandeauHaut = document.createElement('div');
-        bandeauHaut.id = 'bandeauhaut';
+        let gameInfos = document.createElement('div');
+        gameInfos.id = 'gameInfos';
 
-        this.renderInfoJoueur(this.game.Joueur1, bandeauHaut);
-        this.renderInfoJoueur(this.game.Joueur2, bandeauHaut);
-
+        this.renderInfoJoueur(this.game.Joueur1, gameInfos);
+    
         const informationDiv = document.createElement('div');
         informationDiv.id = 'information';
         informationDiv.innerHTML = `C'est à <span class="joueurCourant">` + this.game.joueurQuiJoue.user.name + `</span> de jouer !`;
+        gameInfos.appendChild(informationDiv);
 
-        this.mainDiv.appendChild(bandeauHaut);
-        this.mainDiv.appendChild(informationDiv);
+        this.renderInfoJoueur(this.game.Joueur2, gameInfos);
+        this.gameInfos = gameInfos;
+        this.mainDiv.appendChild(gameInfos);
     }
 
     renderInfoJoueur(joueur, container = null) {
