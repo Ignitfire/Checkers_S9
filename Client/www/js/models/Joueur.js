@@ -69,7 +69,7 @@ export default class Joueur {
     getMoves(plateau) {
         /** recupère tout les coups possible de tous les pions */
         this.pions.forEach(pion => {
-            this.possibleMoves.push(...pion.getPossibleMoves(plateau));
+            this.possibleMoves.push(...pion.getPossibleMoves());
         });
         /** si il y a possiblité de prises retire tout les move de type move et les rafle de pronfondeur inferieur */
         if (this.possibleMoves.some(move => move[0] == "take")) {

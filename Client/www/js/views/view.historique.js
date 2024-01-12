@@ -19,7 +19,11 @@ export class ViewHistorique {
             {
                 header: "Joueur1",
                 data: "joueur1"
+<<<<<<< HEAD
             }, {
+=======
+            },{
+>>>>>>> df8ca9bb8d06d27df35445835c3e77aba4c96e0d
                 header: "Joueur2",
                 data: "joueur2"
             },

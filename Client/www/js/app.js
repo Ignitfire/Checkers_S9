@@ -1,6 +1,6 @@
 import Jeu from './models/Jeu.js';
 import User from './models/User.js';
-const socket = io("http://192.168.1.215:3000");
+const socket = io("http://130.190.118.96:3000");
 import { ViewLoginForm } from "./views/view.loginForm.js";
 import { ViewGame } from "./views/view.game.js";
 import Joueur from "./models/Joueur.js";
@@ -44,6 +44,17 @@ socket.on("connection", () => {
     });
 
     socket.on("start game", (message) => {
+        // si la div main existe, on la retire
+        if (document.querySelector('#damier')) {
+            document.querySelector('#damier').remove();
+        }
+        if (document.querySelector('.navigation')) {
+            document.querySelector('.navigation').remove();
+        }
+        if (document.querySelector('#gameInfos')) {
+            document.querySelector('#gameInfos').remove();
+        }
+
         message = JSON.parse(message);
 
         // Initialisation des utilisateurs (A récupérer plus tard par le webSocket)
@@ -76,22 +87,22 @@ socket.on("connection", () => {
         const navigations = new ViewNavigation(socket, currentUser, opponentUser, gameView);
 
         // ajustement des éléments de main
-        let observer = new MutationObserver(function(mutations) {
+        let observer = new MutationObserver(function (mutations) {
             let main = document.querySelector('#main');
             let divs = main.getElementsByTagName('div');
-        
+
             if (divs.length >= 3) {
                 main.appendChild(document.querySelector('.navigation'));
                 observer.disconnect(); // Stop observing when condition is met
             }
         });
-        
+
         // Configuration of the observer:
         let config = { childList: true, subtree: true };
-        
+
         // Pass in the target node (in this case, '#main') and the observer options
         observer.observe(document.querySelector('#main'), config);
-        
+
         document.querySelector('#main').appendChild(document.querySelector('.navigation'));
 
 
@@ -115,6 +126,7 @@ socket.on("connection", () => {
         const pawn = game.executeMove(moveData);
         gameView.movePawn(pawn, moveData);
         game.tourSuivant();
+        //TODO Move correction, recupération des moves du joueur dans currentPlayer.possibleMoves.
         currentPlayer.getMoves(game.plateau);
         console.log("listes des moves possibles: ", currentPlayer.possibleMoves);
         gameView.refreshJoueurQuiJoue();

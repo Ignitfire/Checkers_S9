@@ -5,6 +5,13 @@
     align-items: center;
 }
 
+#main.game.waitingScreen{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
 #gameInfos {
     display: flex;
     padding: 1rem;
