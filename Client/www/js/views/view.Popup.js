@@ -1,3 +1,4 @@
+// permet de gérer l'affichage des popups (fenetres modales fermales par un clic sur le fond)
 export class ViewPopUp {
     static renderPopUp(content, actionBtn) {
         const popup = document.getElementById("popup");

@@ -19,16 +19,13 @@ export class ViewGame {
     gameInfos;
 
     constructor(game) {
-        this.initGame(game);
-        this.initPion()
-            .then(this.renderGame.bind(this));
-        this.initDame();
-    }
-
-    initGame(game) {
+        // on instancie le jeu dans la view puis on initialise le damier et puis le pions avant de renvoyer la vue.
         this.game = game;
         this.mainDiv = document.getElementById('main');
         this.initDamier();
+        this.initPion()
+            .then(this.renderGame.bind(this));
+        this.initDame();
     }
 
     initDamier() {
@@ -113,6 +110,7 @@ export class ViewGame {
             damier.remove();
     }
 
+    // affichage des boutons de gestion de jeu (à droite du damier)
     renderInterface() {
         this.mainDiv.classList.add('game');
 
@@ -131,6 +129,7 @@ export class ViewGame {
         this.mainDiv.appendChild(gameInfos);
     }
 
+    // affichage des informations des joeurs (à gauche du damier)
     renderInfoJoueur(joueur, container = null) {
         const joueurDiv = document.createElement('div');
         joueurDiv.id = joueur.user.name;
@@ -169,6 +168,7 @@ export class ViewGame {
         });
     }
 
+
     renderPawn(pawn) {
         const pionContent = pawn.level === 1 ? this.dameContent : this.pionContent;
         const parser = new DOMParser();
@@ -188,14 +188,10 @@ export class ViewGame {
                 // On efface tous les mouvements déjà présents
                 this.cleanPossibleMoves();
                 // On affiche les mouvements possibles pour le pion sélectionné
-                //TODO Move Correction, récupération des moves du pion concerné dans joueur.possibleMoves
                 // recuperer les moves possibles du current player
                 let playerMoves = this.game.joueurCourant.possibleMoves;
-                console.log("moves du joueur courant: ", playerMoves);
                 // recuperer les moves possibles du pion concerné
                 let pawnMoves = playerMoves.filter(move => move.ancienneCase.x == pawn.c.x && move.ancienneCase.y == pawn.c.y);
-                console.log("moves du pion: ", pawnMoves);
-                // -> verifier si ancienne case == case du pion
                 this.renderPossibleMoves(pawnMoves);
             }
         });
@@ -204,6 +200,7 @@ export class ViewGame {
         casePion.appendChild(pion);
     }
 
+    // affichage des mouvements possibles pour un pion
     renderPossibleMoves(possibleMoves) {
         possibleMoves.forEach(move => {
             const caseDestination = document.getElementById("case" + move.prochaineCase.x + move.prochaineCase.y);
@@ -267,6 +264,7 @@ export class ViewGame {
         this.renderPawn(pion);
     }
 
+    // affichage de la modal de fin de partie avec les boutons rejouer, score et quitter
     renderGameOver(nomJoueur, socket, message) {
         // Création du contenu de la modal
         const contentContainer = document.createElement("div");

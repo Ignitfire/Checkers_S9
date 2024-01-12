@@ -1,5 +1,6 @@
 import { ViewPopUp } from "./view.Popup.js";
 
+// permet de voir le classement des joueurs
 export class ViewScore {
     constructor(scores) {
         this.renderScore(scores);

@@ -1,3 +1,4 @@
+// gère l'affichage de la modal
 export class ViewModal {
     static renderModal(content, actionBtn) {
         const modal = document.getElementById("modal");

@@ -1,6 +1,6 @@
 import { ViewPopUp } from "./view.Popup.js";
 
-
+// permet l'affichage des boutons de navigation
 export class ViewNavigation {
     navigation;
     constructor(socket, currentPlayer, opponentUser, gameView) {

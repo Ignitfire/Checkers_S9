@@ -1,3 +1,5 @@
+
+// permet de gérer l'affichage du formulaire de connexion
 export class ViewLoginForm {
     constructor() {
         this.initForm();

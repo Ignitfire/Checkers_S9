@@ -120,7 +120,6 @@ socket.on("connection", () => {
             socket.emit("disconnect");
         });
         let currentPlayer = game.joueurCourant;
-        //TODO Move correction, recupération des moves du joueur dans currentPlayer.possibleMoves.
         currentPlayer.getMoves(game.plateau);
         //si il y a au moins un objet contenant un attribut casePionAPrendre dans possibleMoves, supprimer tout les moves sans casePionAPrendre
         if (currentPlayer.possibleMoves.some(move => move.casePionAPrendre)) {
@@ -136,7 +135,6 @@ socket.on("connection", () => {
         gameView.movePawn(pawn, moveData);
         game.tourSuivant();
         let currentPlayer = game.joueurCourant;
-        //TODO Move correction, recupération des moves du joueur dans currentPlayer.possibleMoves.
         currentPlayer.getMoves(game.plateau);
         //si il y a au moins un objet contenant un attribut casePionAPrendre dans possibleMoves, supprimer tout les moves sans casePionAPrendre
         if (currentPlayer.possibleMoves.some(move => move.casePionAPrendre)) {
@@ -144,7 +142,7 @@ socket.on("connection", () => {
         }
         console.log("listes des moves possibles: ", currentPlayer.possibleMoves);
         gameView.refreshJoueurQuiJoue();
-        // Vérifier que le jeu est terminé
+        // Vérifie que le jeu est terminé
         if (game.isOver()) {
             gameView.renderGameOver(currentUser.name, socket);
         }
