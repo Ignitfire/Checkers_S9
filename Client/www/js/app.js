@@ -1,8 +1,8 @@
 import Jeu from './models/Jeu.js';
 import User from './models/User.js';
-const socket = io("http://192.168.1.215:3000");
-import { ViewLoginForm } from "./views/view.loginForm.js";
-import { ViewGame } from "./views/view.game.js";
+const socket = io("http://192.168.16.1:3000");
+import {ViewLoginForm} from "./views/view.loginForm.js";
+import {ViewGame} from "./views/view.game.js";
 import Joueur from "./models/Joueur.js";
 import { ViewScore } from "./views/view.score.js";
 import { ViewNavigation } from './views/view.navigation.js';
@@ -101,7 +101,12 @@ socket.on("connection", () => {
                 const nomGagnant = game.getNomGagnant();
                 // Envoie de la fin de partie et du gagnant
                 socket.emit("fin-partie", nomGagnant);
-                gameView.renderGameOver(currentUser.name, socket);
+
+                // On affiche la modal de fin de partie
+                gameView.renderGameOver(nomGagnant, "Vous avez gagné la partie !");
+
+                // On défini pour chacun des boutons des évènements à envoyer au serveur
+                initButtonsOnGameOver();
             }
         });
 
@@ -122,16 +127,23 @@ socket.on("connection", () => {
         gameView.refreshJoueurQuiJoue();
         // Vérifier que le jeu est terminé
         if (game.isOver()) {
-            gameView.renderGameOver(currentUser.name, socket);
+            const nomGagnant = game.getNomGagnant();
+            gameView.renderGameOver(nomGagnant, "Vous avez perdu la partie");
+
+            // On défini pour chacun des boutons des évènements à envoyer au serveur
+            initButtonsOnGameOver();
         }
     });
 
     // On reçoit l'information du serveur que le joueur adverse s'est déconnecté
-    socket.on("deconnexion-adversaire", (message, joueur) => {
+    socket.on("deconnexion", (message, joueur) => {
         // On envoie au serveur que c'est une fin de partie
         socket.emit("fin-partie", joueur);
         // On informe le joueur qu'il a gagné la partie à cause de la deconnexion de son adversaire
-        gameView.renderGameOver(currentUser.name, socket, message);
+        gameView.renderGameOver(currentUser.name, message);
+
+        // On défini pour chacun des boutons des évènements à envoyer au serveur
+        initButtonsOnGameOver();
     });
 
     socket.on("abandon-adversaire", (message, joueur) => {
@@ -143,9 +155,34 @@ socket.on("connection", () => {
     // On reçoit l'information du serveur d'afficher le tableau des scores
     socket.on("score", (data) => {
         const viewScore = new ViewScore(data, socket);
+        viewScore.modal.getButton('rejouerBtn').addEventListener("click", () => {
+            viewScore.modal.hide();
+            socket.emit("login", {username: currentUserData.username}, 1);
+        });
+        viewScore.modal.getButton('quitterBtn').addEventListener("click", () => {
+            viewScore.modal.hide();
+            socket.emit("quiter");
+        });
     });
+
     // on recoit l'information du serveur d'affiché l'historiques des parties du joueur
     socket.on("historique", (data) => {
         const viewHistorique = new ViewHistorique(data);
     });
+
+    const initButtonsOnGameOver = () => {
+        // On défini pour chacun des boutons des évènements à envoyer au serveur
+        gameView.modal.getButton('rejouerBtn').addEventListener("click", () => {
+            gameView.modal.hide();
+            socket.emit("login", {username: currentUserData.username}, 1);
+        });
+        gameView.modal.getButton('scoreBtn').addEventListener("click", () => {
+            gameView.modal.hide();
+            socket.emit("score");
+        });
+        gameView.modal.getButton('quitterBtn').addEventListener("click", () => {
+            gameView.modal.hide();
+            socket.emit("quiter");
+        });
+    }
 });

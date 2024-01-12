@@ -260,52 +260,15 @@ export class ViewGame {
         this.renderPawn(pion);
     }
 
-    renderGameOver(nomJoueur, socket, message) {
+    renderGameOver(nomJoueur, message) {
         const contentContainer = this.createMessageContainer(message);
-        //const buttonsContainer = this.createButtonsContainer(socket, nomJoueur);
 
         // On affiche la modal
         this.modal = new Modal('modal-gameover', contentContainer);
-        this.modal.renderModal();
-    }
-
-    createButtonsContainer(socket, nomJoueur) {
-        // Création du container de bouton
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("button-container");
-
-        // Création du bouton rejouer
-        const rejouerBtn = document.createElement("button");
-        rejouerBtn.id = "rejouerBtn";
-        rejouerBtn.classList.add("modal-button");
-        rejouerBtn.innerText = "Rejouer";
-        rejouerBtn.addEventListener("click", () => {
-            socket.emit("login", {username: nomJoueur}, 1);
-            Modal.hideModal();
-        });
-
-        // Création du bouton score
-        const scoreBtn = rejouerBtn.cloneNode(true);
-        scoreBtn.id = "scoreBtn";
-        scoreBtn.innerText = "Score";
-        scoreBtn.addEventListener("click", () => {
-            socket.emit("score");
-        });
-
-        // Création du bouton quitter
-        const quitterBtn = rejouerBtn.cloneNode(true);
-        quitterBtn.id = "quitterBtn";
-        quitterBtn.innerText = "Quitter";
-        quitterBtn.addEventListener("click", () => {
-            socket.emit("quitter");
-            Modal.hideModal();
-        });
-
-        // On ajoute tous les boutons au container
-        buttonsContainer.appendChild(rejouerBtn);
-        buttonsContainer.appendChild(scoreBtn);
-        buttonsContainer.appendChild(quitterBtn);
-        return buttonsContainer;
+        this.modal.addButton('rejouerBtn', 'Rejouer');
+        this.modal.addButton('scoreBtn', 'Score');
+        this.modal.addButton('quitterBtn', 'Quitter');
+        this.modal.render();
     }
 
     createMessageContainer(message) {

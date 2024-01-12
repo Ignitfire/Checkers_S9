@@ -56,6 +56,7 @@ export class ViewLoginForm {
 
     renderForm() {
         const mainDiv = document.getElementById('main');
+        this.clear();
         mainDiv.appendChild(this.form);
         mainDiv.classList.add("loginForm");
     }
@@ -116,5 +117,12 @@ export class ViewLoginForm {
 
     renderError(errorMessage) {
         document.getElementById('errorMessage').innerText = errorMessage;
+    }
+
+    clear() {
+        const mainDiv = document.getElementById("main");
+        while(mainDiv.firstChild) {
+            mainDiv.removeChild(mainDiv.lastChild);
+        }
     }
 }

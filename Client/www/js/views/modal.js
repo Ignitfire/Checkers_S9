@@ -1,46 +1,51 @@
 export class Modal {
     constructor(id, content) {
-        this.id = id;
-        this.initModal(content);
+        this.init(id, content);
     }
 
-    initModal(content) {
-        // Création de la modal
-        const modal = document.createElement('div');
-        modal.classList.add('modal');
-        modal.id = this.id;
+    init(id, content) {
+        this.id = id;
+        this.buttons = [];
+        this.content = document.createElement('div');
+        this.content.id = id;
+        this.content.classList.add('modal');
 
         // Création du contenu de la modal
         const modalContent = document.createElement("div");
         modalContent.classList.add("modal-content");
+
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("button-container");
 
         modalContent.appendChild(content);
         modalContent.appendChild(buttonsContainer);
+        this.content.appendChild(modalContent);
 
-        modal.appendChild(modalContent);
-        document.querySelector('body').appendChild(modal);
+        document.querySelector('body').appendChild(this.content);
     }
 
-    renderModal() {
-        const modal = document.getElementById(this.id);
-        if (modal) {
-            // Rend visible la modal
-            modal.classList.add('show');
-        }
+    render() {
+        // Rend visible la modal
+        this.content.classList.add('show');
     }
 
-    hideModal() {
-        const modal = document.getElementById(this.id);
-        if (modal) {
-            modal.classList.remove('show');
-        }
+    hide() {
+        this.content.classList.remove('show');
     }
 
-    createButton(id) {
+    addButton(id, label) {
         const button = document.createElement("button");
         button.id = id;
         button.classList.add("modal-button");
+        button.innerText = label;
+
+        this.buttons.push({id: id, button: button});
+
+        const buttonsContainer = this.content.querySelector(".button-container");
+        buttonsContainer.appendChild(button);
+    }
+
+    getButton(id) {
+        return this.buttons.find((btn)=> btn.id === id)?.button;
     }
 }
