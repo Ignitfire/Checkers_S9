@@ -4,23 +4,25 @@ var Partie = game_model.Partie;
 
 
 async function updateGagnant(name) {
-    await Partie.findOneAndUpdate({ 
+    await Partie.findOneAndUpdate({
         $and: [
             { $or: [{ joueur1: name }, { joueur2: name }] },
             { gagnant: "" }
         ]
-    }, { gagnant: name }) 
+    }, { gagnant: name })
 }
 
 
-async function create (data) {
-    const currentDate  = new Date();
-    const optionDate = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'}
+async function create(data) {
+    const currentDate = new Date();
+    const optionDate = {
+        weekday: 'short', year: 'numeric', month: 'long'
+    }
     let nouvellePartie = new Partie({
         joueur1: data.joueur1,
         joueur2: data.joueur2,
         gagnant: "",
-        datePartie: currentDate.toLocaleDateString('fr-FR', optionDate) 
+        datePartie: currentDate.toLocaleString('fr-FR', optionDate)
     });
 
     // Sauvegarde de cette instance dans mongoDb

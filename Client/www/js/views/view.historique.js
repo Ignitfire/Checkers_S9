@@ -49,9 +49,11 @@ export class ViewHistorique {
 
         // Fonction pour formater la date
         const formatDate = (dateString) => {
-            const options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'};
+            const options = {
+                weekday: 'short', year: 'numeric', month: 'long'
+            };
             const date = new Date(dateString);
-            return date.toLocaleDateString('fr-FR', options);
+            return date.toLocaleString('fr-FR', options);
         };
 
         // Boucle pour créer le contenu du tableau
