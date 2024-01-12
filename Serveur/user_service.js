@@ -24,7 +24,7 @@ async function authenticate(data) {
 
     //on compare les mots de passe
     if(bcrypt.compareSync(data.password, user.password)) {
-        console.log("Identification: Utilisateur" + data.username + "est authentifié");
+        console.log("Identification: Utilisateur " + data.username + " est authentifié");
         //on retourne l'utilisateur authentifié et qu'il n'y a pas d'erreur
         return {error: null, user: user}; 
     } else {
@@ -37,7 +37,7 @@ async function authenticate(data) {
 async function create(data) {
     const existingUser = await User.findOne({ username: data.username }); // on cherche l'utilisateur dans la bdd
     if (existingUser) {
-        console.log("Utilisateur" + data.username + "déjà existant" );
+        console.log("Utilisateur " + data.username + " existe déjà" );
         return { error: "Utilisateur déjà existant ", user: {} };
     }
 
@@ -57,7 +57,7 @@ async function create(data) {
     //on sauvegarde l'utilisateur dans la bdd
     await user.save()
         .then(() => {
-            console.log("Utilisateu ajouté à la bdd avec succès ");
+            console.log("Utilisateur a été ajouté à la bdd avec succès ");
         })
         .catch(err => {
             console.log(err); //on affiche l'erreur
@@ -87,7 +87,7 @@ async function getUserVictoires(username) {
  */
 async function getPlayerGameHistory(username) {
     return await Partie.find({ $or: [{ joueur1: username }, { joueur2: username }] },
-        ['joueur1', 'joueur2', 'gagnant', 'datePartie']).sort({ datePartie: -1 });
+        ['joueur1', 'joueur2', 'gagnant', 'datePartie']).sort({ datePartie: -1 });  //
 }
 
 

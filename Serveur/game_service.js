@@ -14,11 +14,13 @@ async function updateGagnant(name) {
 
 
 async function create (data) {
+    const currentDate  = new Date();
+    const optionDate = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'}
     let nouvellePartie = new Partie({
         joueur1: data.joueur1,
         joueur2: data.joueur2,
         gagnant: "",
-        datePartie: Date.now()
+        datePartie: currentDate.toLocaleDateString('fr-FR', optionDate) 
     });
 
     // Sauvegarde de cette instance dans mongoDb
