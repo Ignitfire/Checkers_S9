@@ -73,7 +73,7 @@ async function create(data) {
  * @returns renvoie une liste d'utilisateurs => JSON
  * */
 async function getAllUserScore() {
-    return await User.find({}, ['username', 'nbVictoires', 'nbParties']);
+    return await User.find({}, ['username', 'nbVictoires', 'nbParties']).sort({ nbVictoires: 1 });
     // => fonctionne si on change le modèle de User pour ajouter les champs nbVictoires et nbParties
 }
 
