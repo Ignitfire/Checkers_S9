@@ -189,7 +189,14 @@ export class ViewGame {
                 this.cleanPossibleMoves();
                 // On affiche les mouvements possibles pour le pion sélectionné
                 //TODO Move Correction, récupération des moves du pion concerné dans joueur.possibleMoves
-                this.renderPossibleMoves(pawn.getPossibleMoves());
+                // recuperer les moves possibles du current player
+                let playerMoves = this.game.joueurCourant.possibleMoves;
+                console.log("moves du joueur courant: ", playerMoves);
+                // recuperer les moves possibles du pion concerné
+                let pawnMoves = playerMoves.filter(move => move.ancienneCase.x == pawn.c.x && move.ancienneCase.y == pawn.c.y);
+                console.log("moves du pion: ", pawnMoves);
+                // -> verifier si ancienne case == case du pion
+                this.renderPossibleMoves(pawnMoves);
             }
         });
 

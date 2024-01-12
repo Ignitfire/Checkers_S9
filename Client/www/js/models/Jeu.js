@@ -43,8 +43,11 @@ export default class Jeu {
         prochaineCase.setPawn(pionABouger); // On informe la nouvelle case qu'elle a un pion
         if (!!move.casePionAPrendre) {
             const casePionAPrendre = this.plateau.getCaseFromCoord(move.casePionAPrendre);
+            let pionAPrendre = casePionAPrendre.pion;
             casePionAPrendre.pion.c = null;
             casePionAPrendre.setPawn(null);
+            // On supprime pionAprendre de la liste des pions du joueur associé à ce pion
+            pionAPrendre.player.pions = pionAPrendre.player.pions.filter(p => p !== pionAPrendre);
         }
 
         return pionABouger;
