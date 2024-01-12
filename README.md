@@ -42,20 +42,17 @@ les personnes qui veulent jouer.
 Il est en fait question de démarrer deux serveur : un serveur de base de données pour gérer la persistence des données 
 (utilisateur, historique de partie, etc...) et un serveur NodeJS pour la connexion au jeu et la jouabilité à plusieurs.
 
-### Serveur de base de données (`mongoose`)
+Le script `LaunchServers.bat` positionné à la racine du projet permet de lancer ces deux serveurs dans des consoles à part.
 
-Pour lancer le serveur de base de données `mongoose`, suivez les étapes suivantes :
+Dès que ces deux serveurs ont fini de démarrer. Il est possible pour les joueurs de se connecter. Noter l'adresse IP du serveur NodeJS.
+Elle vous sera utile pour que les clients puissent se connecter.
 
-1. Se positionner au sein du projet dans le répertoire `Serveur`
-2. Exécuter la commande `mongod --dbpath PATH` (remplacer `PATH` par le chemin d'un répertoire dans lequel se trouvera les fichiers et répertoires du serveur de base de données)
+## Jouabilité
 
-Le serveur se lancera dans votre terminal. Il est important de noter qu'il faudra impérativement garder le terminal ouvert pour que le serveur soit actif.
+Il ne vous reste plus qu'une deux étapes pour pouvoir jouer. La première est de modifier côté Client l'adresse IP de connexion
+au serveur Node JS. Suivez les étapes suivantes : 
 
-### Serveur NodeJS
+1. Copier l'adresse IP ou l'une des adresses IP que le serveur NodeJS affiche.
+2. Dans le répertoire `Client`, ouvrez le fichier `app.js` et modifier la ligne suivante en prenant soin de copier l'adresse IP `const socket = io("ADRESSE_IP");`
 
-Pour lancer le serveur du jeu, suivez les étapes suivantes :
-
-1. Se positionner au sein du projet dans le répertoire `Serveur`
-2. Exécuter la commande `node app.js`
-
-Le serveur se lancera dans votre terminal. Il est important de noter qu'il faudra impérativement garder le terminal ouvert pour que le serveur soit actif.
+Enfin, la dernière étape est de lancer la commande `cordova run browser` ou `cordova run android`.

@@ -21,7 +21,7 @@ function getNbVictoire(name) {
 
 function addVictoire (name) {
    user_service.updateVictoire(name).then(data => {
-        console.log("Mise à jour du nombre de victoires du joueur" + name);
+        console.log("Mise à jour du nombre de victoires du joueur " + name);
    })
 }
 
@@ -32,7 +32,7 @@ function addVictoire (name) {
 
 function addPartie (name) {
     user_service.updatePartie(name).then(data => {
-        console.log("Mis à jour du nombre de parties jouées par le joueur" + name);
+        console.log("Mis à jour du nombre de parties jouées par le joueur " + name);
     })
 }
 

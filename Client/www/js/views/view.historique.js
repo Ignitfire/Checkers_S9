@@ -19,11 +19,11 @@ export class ViewHistorique {
             {
                 header: "Joueur1",
                 data: "joueur1"
-            },{
+            }, {
                 header: "Joueur2",
                 data: "joueur2"
             },
-             {
+            {
                 header: "gagnant",
                 data: "gagnant"
             }, {
@@ -47,13 +47,22 @@ export class ViewHistorique {
         }
         tableHeader.append(firstRow);
 
+        // Fonction pour formater la date
+        const formatDate = (dateString) => {
+            const options = {
+                weekday: 'short', year: 'numeric', month: 'long'
+            };
+            const date = new Date(dateString);
+            return date.toLocaleString('fr-FR', options);
+        };
+
         // Boucle pour créer le contenu du tableau
         const tableBody = document.createElement("tbody");
         for (let i = 0; i < history.length; i++) {
             const row = document.createElement("tr");
             for (let j = 0; j < arr.length; j++) {
                 const cell = document.createElement("td");
-                cell.innerText = history[i][arr[j].data];
+                cell.innerText = arr[j].data === "datePartie" ? formatDate(history[i][arr[j].data]) : history[i][arr[j].data];
                 row.appendChild(cell);
             }
 
