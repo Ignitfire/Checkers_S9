@@ -67,6 +67,7 @@ export default class Joueur {
 
     /** recupere les coups (possibleMoves) et rafles (suite de possibleMoves dans moveSequence) */
     getMoves(plateau) {
+        this.possibleMoves = [];
         /** recupère tout les coups possible de tous les pions */
         this.pions.forEach(pion => {
             this.possibleMoves.push(...pion.getPossibleMoves());

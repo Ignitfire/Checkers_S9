@@ -68,6 +68,10 @@ export default class Pion {
                 let wentOver = false;
                 while (destination != null) {
                     let caseFromDirection = this.getPlateau().getCaseFromCoord(destination); // On récupère la case à partir des coordonnées X,Y
+                    if (caseFromDirection.hasPawn() && wentOver) {
+                        console.log("break");
+                        break;
+                    }
                     if (!wentOver) {
                         /** si la case est libre sans prise */
                         if (!caseFromDirection.hasPawn() && !takeOnly) {
@@ -90,7 +94,9 @@ export default class Pion {
                                     });
                                     wentOver = true;
                                 }
+                                else break;
                             }
+                            else break;
                         }
                     } else if (!caseFromDirection.hasPawn()) {
                         moves.push({
@@ -98,7 +104,7 @@ export default class Pion {
                             prochaineCase: caseFromDirection.getCoord(),
                             casePionAPrendre: pawnToTake.c.getCoord()
                         });
-                    } else break;
+                    }
                     /** itération sur la case suivante dans la meme direction, continue tant qu'on à pas rencontrer le bord ou deux pions. */
                     destination = caseFromDirection.getCoordFromDirection(direction);
                 }

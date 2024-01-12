@@ -25,7 +25,6 @@ socket.on("connection", () => {
     let currentUserData;
     let currentUser;
     let game;
-    let currentPlayer;
 
     viewLoginForm.form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -62,20 +61,21 @@ socket.on("connection", () => {
         let opponentUser = new User(message.adversaire);
         let joueur1;
         let joueur2;
+        let joueurCourant;
 
         if (message.color === 'noir') {
             joueur1 = new Joueur(opponentUser, 'blanc');
             joueur2 = new Joueur(currentUser, message.color);
-            currentPlayer = joueur2;
+            joueurCourant = joueur2;
         } else {
             joueur1 = new Joueur(currentUser, message.color);
             joueur2 = new Joueur(opponentUser, 'noir');
-            currentPlayer = joueur1;
+            joueurCourant = joueur1;
         }
 
 
         // Initialisation du jeu
-        game = new Jeu(joueur1, joueur2, currentPlayer);
+        game = new Jeu(joueur1, joueur2, joueurCourant);
 
         // On supprime l'affichage de la waiting screen et/ou du formulaire
         viewLoginForm.clearRender();
@@ -105,7 +105,6 @@ socket.on("connection", () => {
 
         document.querySelector('#main').appendChild(document.querySelector('.navigation'));
 
-
         game.deplacementEvent.addEventListener('deplacement-move', (e) => {
             socket.emit('deplacement-move', e.detail);
             if (game.isOver()) {
@@ -120,14 +119,29 @@ socket.on("connection", () => {
             // On envoit au serveur que l'utilisateur s'est déconnecté
             socket.emit("disconnect");
         });
+        let currentPlayer = game.joueurCourant;
+        //TODO Move correction, recupération des moves du joueur dans currentPlayer.possibleMoves.
+        currentPlayer.getMoves(game.plateau);
+        //si il y a au moins un objet contenant un attribut casePionAPrendre dans possibleMoves, supprimer tout les moves sans casePionAPrendre
+        if (currentPlayer.possibleMoves.some(move => move.casePionAPrendre)) {
+            currentPlayer.possibleMoves = currentPlayer.possibleMoves.filter(move => move.casePionAPrendre);
+        }
+        console.log("listes des moves possibles: ", currentPlayer.possibleMoves);
     });
+
+
 
     socket.on("deplacement-move", (moveData) => {
         const pawn = game.executeMove(moveData);
         gameView.movePawn(pawn, moveData);
         game.tourSuivant();
+        let currentPlayer = game.joueurCourant;
         //TODO Move correction, recupération des moves du joueur dans currentPlayer.possibleMoves.
         currentPlayer.getMoves(game.plateau);
+        //si il y a au moins un objet contenant un attribut casePionAPrendre dans possibleMoves, supprimer tout les moves sans casePionAPrendre
+        if (currentPlayer.possibleMoves.some(move => move.casePionAPrendre)) {
+            currentPlayer.possibleMoves = currentPlayer.possibleMoves.filter(move => move.casePionAPrendre);
+        }
         console.log("listes des moves possibles: ", currentPlayer.possibleMoves);
         gameView.refreshJoueurQuiJoue();
         // Vérifier que le jeu est terminé
