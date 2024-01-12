@@ -13,7 +13,7 @@ async function addRoom(socket) {
         else {
             //il faut qu'on vérifie si elle ne possède pas déjà 2 joueurs
             if (socket.adapter.rooms['room' + i].length < 2) {
-                await socket.join("room" +1);
+                await socket.join("room" + i);
                 break;
             }
             //on continue le parcour des rooms 
