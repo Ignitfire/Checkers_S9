@@ -116,8 +116,6 @@ socket.on("connection", () => {
             }
         });
 
-
-
         window.addEventListener('unload', (e) => {
             // On envoit au serveur que l'utilisateur s'est déconnecté
             socket.emit("disconnect");
@@ -139,7 +137,7 @@ socket.on("connection", () => {
     });
 
     // On reçoit l'information du serveur que le joueur adverse s'est déconnecté
-    socket.on("deconnexion-adversaire", (message, joueur) => {
+    socket.on("deconnexion", (message, joueur) => {
         // On envoie au serveur que c'est une fin de partie
         socket.emit("fin-partie", joueur);
         // On informe le joueur qu'il a gagné la partie à cause de la deconnexion de son adversaire
